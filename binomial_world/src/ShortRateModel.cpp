@@ -21,5 +21,6 @@ void ShortRateModel::buildLattice()
 
 const BinomialLattice<double> &ShortRateModel::getLattice() const
 {
+    assert(latticeBuilt);
     return r;
 }
