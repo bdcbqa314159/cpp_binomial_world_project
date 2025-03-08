@@ -3,5 +3,5 @@
 
 void binomial_world_project()
 {
-    std::cout << "This project is about the binomial pricing model for derivatives.\n";
+    std::cout << "This project is about implementing the Binomial Model to pricing different derivatives.\n";
 }
