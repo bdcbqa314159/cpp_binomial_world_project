@@ -2,3 +2,4 @@
 
 #include "./includes/binomial_world.hpp"
 #include "./includes/BinomialLattice.hpp"
+#include "./includes/ShortRateModel.hpp"

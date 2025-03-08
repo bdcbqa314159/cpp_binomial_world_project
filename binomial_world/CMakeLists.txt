@@ -1,7 +1,8 @@
 project(binomial_world)
 
 set(includes includes/)
-set(sources src/binomial_world.cpp)
+set(sources src/binomial_world.cpp
+            src/ShortRateModel.cpp)
 
 add_library(${PROJECT_NAME} ${sources})
 target_include_directories(${PROJECT_NAME} PUBLIC ${includes})
