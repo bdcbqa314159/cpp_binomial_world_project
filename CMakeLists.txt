@@ -9,7 +9,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 MESSAGE(STATUS "the source directory is: ${CMAKE_SOURCE_DIR}")
 
-add_subdirectory(code)
+find_package(GSL REQUIRED)
+find_package(Boost REQUIRED COMPONENTS date_time)
+
+add_subdirectory(binomial_world)
+
+add_subdirectory(work)
 
 
 
