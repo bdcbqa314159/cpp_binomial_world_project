@@ -1,6 +1,6 @@
 #include "ShortRateModel.hpp"
 
-ShortRateModel::ShortRateModel(double new_q, size_t new_N, const std::vector<double> &new_a_i, double new_b) : q(new_q), N(new_N), a_i(new_a_i), b(new_b)
+ShortRateModel::ShortRateModel(size_t new_N, const std::vector<double> &new_a_i, double new_b) : N(new_N), a_i(new_a_i), b(new_b)
 {
     r = BinomialLattice<double>(N);
 }
@@ -13,9 +13,10 @@ void ShortRateModel::buildLattice()
     {
         for (size_t j = 0; j < i + 1; j++)
         {
-            r(i, j, a_i[i - 1] * exp(b * j));
+            r(i, j, a_i[i] * exp(b * j));
         }
     }
+    latticeBuilt = true;
 }
 
 const BinomialLattice<double> &ShortRateModel::getLattice() const
