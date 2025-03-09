@@ -7,3 +7,4 @@
 #include "./includes/ElementaryPrices.hpp"
 #include "./includes/NewtonRaphson.hpp"
 #include "./includes/CalibrationFunctionBDT.hpp"
+#include "./includes/CalibrationProcess.hpp"
