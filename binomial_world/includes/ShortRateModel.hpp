@@ -15,8 +15,8 @@ private:
 
 public:
     ShortRateModel() = default;
-    ShortRateModel(size_t, const std::vector<double> &, double);
-
+    ShortRateModel(const std::vector<double> &, double);
+    size_t getN() const;
     void buildLattice();
     const BinomialLattice<double> &getLattice() const;
 };
