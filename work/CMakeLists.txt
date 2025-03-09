@@ -3,7 +3,10 @@ project(work)
 set(includes ./ ../binomial_world/)
 
 add_executable(work main.cpp)
+
 add_executable(test test.cpp)
+target_include_directories(test PUBLIC ${includes})
+target_link_libraries(test binomial_world)
 
 
 add_executable(coding_bits coding.cpp)
