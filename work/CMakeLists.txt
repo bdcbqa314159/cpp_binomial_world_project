@@ -13,3 +13,7 @@ target_link_libraries(coding_bits binomial_world)
 add_executable(bdt BDT.cpp)
 target_include_directories(bdt PUBLIC ${includes})
 target_link_libraries(bdt binomial_world)
+
+add_executable(calibration_issue calibration.cpp)
+target_include_directories(calibration_issue PUBLIC ${includes})
+target_link_libraries(calibration_issue binomial_world)
