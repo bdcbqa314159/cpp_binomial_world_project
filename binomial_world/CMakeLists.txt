@@ -7,7 +7,10 @@ set(sources src/binomial_world.cpp
             src/NewtonRaphson.cpp
             src/CalibrationFunctionBDT.cpp
             src/CalibrationProcess.cpp
-            src/BinomialDirections.cpp)
+            src/BinomialDirections.cpp
+            src/BinomialRiskFreeRate.cpp
+            src/BinomialRiskNeutralProbability.cpp
+            src/Spot.cpp)
 
 add_library(${PROJECT_NAME} ${sources})
 target_include_directories(${PROJECT_NAME} PUBLIC ${includes})
