@@ -8,6 +8,7 @@ private:
     double q{}, p{};
 
 public:
+    BinomialRiskNeutralProbability() = default;
     BinomialRiskNeutralProbability(double, double);
     double getQ() const { return q; }
     double getP() const { return p; }
