@@ -6,7 +6,8 @@ set(sources src/binomial_world.cpp
             src/ElementaryPrices.cpp
             src/NewtonRaphson.cpp
             src/CalibrationFunctionBDT.cpp
-            src/CalibrationProcess.cpp)
+            src/CalibrationProcess.cpp
+            src/BinomialDirections.cpp)
 
 add_library(${PROJECT_NAME} ${sources})
 target_include_directories(${PROJECT_NAME} PUBLIC ${includes})

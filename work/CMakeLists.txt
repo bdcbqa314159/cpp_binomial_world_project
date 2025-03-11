@@ -20,3 +20,7 @@ target_link_libraries(bdt binomial_world)
 add_executable(calibration_issue calibration.cpp)
 target_include_directories(calibration_issue PUBLIC ${includes})
 target_link_libraries(calibration_issue binomial_world)
+
+add_executable(binomial_test binomial.cpp)
+target_include_directories(binomial_test PUBLIC ${includes})
+target_link_libraries(binomial_test binomial_world)

@@ -8,3 +8,4 @@
 #include "./includes/NewtonRaphson.hpp"
 #include "./includes/CalibrationFunctionBDT.hpp"
 #include "./includes/CalibrationProcess.hpp"
+#include "./includes/BinomialDirections.hpp"
