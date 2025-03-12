@@ -16,7 +16,7 @@ public:
     BinomialLattice() = default;
     BinomialLattice(size_t);
 
-    const size_t &size() const;
+    size_t size() const;
     const std::vector<T> &operator[](size_t) const;
     void operator()(size_t, size_t, const T &);
     T &operator()(size_t, size_t);
@@ -34,7 +34,7 @@ BinomialLattice<T>::BinomialLattice(size_t newN) : N(newN)
 }
 
 template <typename T>
-const size_t &BinomialLattice<T>::size() const
+size_t BinomialLattice<T>::size() const
 {
     return N;
 }
@@ -74,7 +74,7 @@ std::ostream &operator<<(std::ostream &os, const BinomialLattice<T> &Lattice)
     {
         for (size_t j = 0; j < i + 1; j++)
         {
-            os << Lattice(i, j) << " ";
+            os << Lattice[i][j] << " ";
         }
         os << std::endl;
     }

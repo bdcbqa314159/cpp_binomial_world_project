@@ -1,4 +1,5 @@
 #include "Options.hpp"
+#include "BinomialLattice.hpp"
 #include <cassert>
 
 Option::Option(size_t newN) : N(newN) {}
@@ -30,15 +31,13 @@ double EurOption::priceByCRR(const BinomialModel &model) const
     return prices[0];
 }
 
-AmOption::AmOption(size_t newN) : Option(newN) {}
+AmOption::AmOption(size_t newN) : Option(newN), priceTree(N), stoppingTree(N) {}
 
-double AmOption::PriceBySnell(const BinomialModel &model) const
+double AmOption::PriceBySnell(const BinomialModel &model)
 {
     double q = model.riskNeutralProbability();
     size_t N = getN();
 
-    BinomialLattice<double> priceTree(N);
-    BinomialLattice<bool> stoppingTree(N);
     double continuationValue{};
     double discount = 1. / (1 + model.getR());
 
@@ -53,7 +52,7 @@ double AmOption::PriceBySnell(const BinomialModel &model) const
         for (int i = 0; i <= n; ++i)
         {
             continuationValue = discount * (q * priceTree(n + 1, i + 1) + (1. - q) * priceTree(n + 1, i));
-            priceTree(n, i, payoff(model(n, i)));
+            priceTree(n, i, payoff(model.getLattice()(n, i)));
             stoppingTree(n, i, true);
 
             if (continuationValue > priceTree(n, i))
