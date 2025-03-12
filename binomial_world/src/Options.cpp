@@ -1,6 +1,8 @@
 #include "Options.hpp"
 #include <cassert>
 
+Option::Option(size_t newN) : N(newN) {}
+
 EurOption::EurOption(size_t newN) : Option(newN) {}
 
 double EurOption::priceByCRR(const BinomialModel &model) const

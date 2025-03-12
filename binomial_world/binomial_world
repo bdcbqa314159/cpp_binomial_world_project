@@ -13,3 +13,5 @@
 #include "./includes/BinomialRiskNeutralProbability.hpp"
 #include "./includes/Spot.hpp"
 #include "./includes/BinomialModel.hpp"
+#include "./includes/Options.hpp"
+#include "./includes/SingleStrikeOptions.hpp"
