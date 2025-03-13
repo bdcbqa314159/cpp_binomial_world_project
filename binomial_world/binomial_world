@@ -15,3 +15,4 @@
 #include "./includes/BinomialModel.hpp"
 #include "./includes/Options.hpp"
 #include "./includes/SingleStrikeOptions.hpp"
+#include "./includes/Futures.hpp"

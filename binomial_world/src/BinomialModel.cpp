@@ -48,3 +48,14 @@ const double &BinomialModel::operator()(size_t i, size_t j) const
 {
     return lattice(i, j);
 }
+
+size_t BinomialModel::getN() const
+{
+    return N;
+}
+
+BinomialLattice<double> &BinomialModel::changeLattice()
+{
+    assert(built);
+    return lattice;
+}

@@ -13,7 +13,8 @@ set(sources src/binomial_world.cpp
             src/Spot.cpp
             src/BinomialModel.cpp
             src/Options.cpp
-            src/SingleStrikeOptions.cpp)
+            src/SingleStrikeOptions.cpp
+            src/Futures.cpp)
 
 add_library(${PROJECT_NAME} ${sources})
 target_include_directories(${PROJECT_NAME} PUBLIC ${includes})

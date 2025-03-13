@@ -17,8 +17,10 @@ private:
 public:
     BinomialModel() = default;
     BinomialModel(double, double, double, size_t);
+    size_t getN() const;
     double getR() const;
     double riskNeutralProbability() const;
     const BinomialLattice<double> &getLattice() const;
+    BinomialLattice<double> &changeLattice();
     const double &operator()(size_t, size_t) const;
 };
