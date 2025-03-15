@@ -3,9 +3,8 @@
 #include "BinomialRiskNeutralProbability.hpp"
 #include "Spot.hpp"
 
-class BinomialModel
-{
-private:
+class BinomialModel {
+   private:
     Spot S0;
     size_t N{};
     BinomialRiskNeutralProbability q;
@@ -14,7 +13,7 @@ private:
 
     void buildLattice();
 
-public:
+   public:
     BinomialModel() = default;
     BinomialModel(double, double, double, size_t);
     size_t getN() const;

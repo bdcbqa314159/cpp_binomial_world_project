@@ -1,11 +1,10 @@
 #pragma once
 
-class BinomialDirections
-{
-private:
+class BinomialDirections {
+   private:
     double U{}, D{};
 
-public:
+   public:
     BinomialDirections() = default;
     BinomialDirections(double);
     double getU() const { return U; }

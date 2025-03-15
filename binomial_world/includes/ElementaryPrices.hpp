@@ -1,18 +1,18 @@
 #pragma once
 #include <iostream>
 #include <vector>
+
 #include "BinomialLattice.hpp"
 
-class ElementaryPrices
-{
-private:
+class ElementaryPrices {
+   private:
     double q{};
     size_t N{};
     BinomialLattice<double> z;
     std::vector<double> zcb, spotRates;
     bool latticeBuilt{false}, ratesBuilt{false};
 
-public:
+   public:
     ElementaryPrices() = default;
     ElementaryPrices(double, size_t);
 

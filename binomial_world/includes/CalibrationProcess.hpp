@@ -1,14 +1,13 @@
 #pragma once
 #include <vector>
 
-class InputsCalibration
-{
+class InputsCalibration {
     // We are still working with BDT model
-private:
+   private:
     std::vector<double> observed_spot_rates;
     double q{}, b{};
 
-public:
+   public:
     InputsCalibration() = default;
     InputsCalibration(const std::vector<double> &, double, double);
 
@@ -17,28 +16,27 @@ public:
     double getB() const;
 };
 
-class OutputsCalibration
-{
-private:
+class OutputsCalibration {
+   private:
     std::vector<double> a;
     double q{}, b{};
 
-public:
+   public:
     OutputsCalibration() = default;
-    OutputsCalibration(const std::vector<double> &new_a, double new_q, double new_b);
+    OutputsCalibration(const std::vector<double> &new_a, double new_q,
+                       double new_b);
     const std::vector<double> &getA() const;
     double getQ() const;
     double getB() const;
 };
 
-class Calibration
-{
-private:
+class Calibration {
+   private:
     InputsCalibration inputs;
     OutputsCalibration outputs;
     bool calibrated{false};
 
-public:
+   public:
     Calibration() = default;
     Calibration(const InputsCalibration &);
     const InputsCalibration &getInputs() const;

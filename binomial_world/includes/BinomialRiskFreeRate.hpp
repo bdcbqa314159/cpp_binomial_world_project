@@ -1,13 +1,12 @@
 #pragma once
 #include "BinomialDirections.hpp"
 
-class BinomialRiskFreeRate
-{
-private:
+class BinomialRiskFreeRate {
+   private:
     BinomialDirections directions;
     double R{};
 
-public:
+   public:
     BinomialRiskFreeRate() = default;
     BinomialRiskFreeRate(double, double);
     double getR() const { return R; }

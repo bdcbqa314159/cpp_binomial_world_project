@@ -1,18 +1,17 @@
 #pragma once
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
-// Fundamental block of the binmomial model - the binomial lattice as a data structure
+// Fundamental block of the binmomial model - the binomial lattice as a data
+// structure
 
 template <typename T>
-class BinomialLattice
-{
-
-private:
+class BinomialLattice {
+   private:
     size_t N{};
     std::vector<std::vector<T>> Lattice;
 
-public:
+   public:
     BinomialLattice() = default;
     BinomialLattice(size_t);
 
@@ -24,56 +23,46 @@ public:
 };
 
 template <typename T>
-BinomialLattice<T>::BinomialLattice(size_t newN) : N(newN)
-{
+BinomialLattice<T>::BinomialLattice(size_t newN) : N(newN) {
     Lattice.resize(N + 1);
-    for (size_t i = 0; i < N + 1; i++)
-    {
+    for (size_t i = 0; i < N + 1; i++) {
         Lattice[i].resize(i + 1);
     }
 }
 
 template <typename T>
-size_t BinomialLattice<T>::size() const
-{
+size_t BinomialLattice<T>::size() const {
     return N;
 }
 
 template <typename T>
-const std::vector<T> &BinomialLattice<T>::operator[](size_t i) const
-{
+const std::vector<T> &BinomialLattice<T>::operator[](size_t i) const {
     assert(i <= N);
     return Lattice[i];
 }
 
 template <typename T>
-void BinomialLattice<T>::operator()(size_t i, size_t j, const T &x)
-{
+void BinomialLattice<T>::operator()(size_t i, size_t j, const T &x) {
     assert(i <= N && j <= i);
     Lattice[i][j] = x;
 }
 
 template <typename T>
-T &BinomialLattice<T>::operator()(size_t i, size_t j)
-{
+T &BinomialLattice<T>::operator()(size_t i, size_t j) {
     assert(i <= N && j <= i);
     return Lattice[i][j];
 }
 
 template <typename T>
-const T &BinomialLattice<T>::operator()(size_t i, size_t j) const
-{
+const T &BinomialLattice<T>::operator()(size_t i, size_t j) const {
     assert(i <= N && j <= i);
     return Lattice[i][j];
 }
 
 template <typename T>
-std::ostream &operator<<(std::ostream &os, const BinomialLattice<T> &Lattice)
-{
-    for (size_t i = 0; i <= Lattice.size(); i++)
-    {
-        for (size_t j = 0; j < i + 1; j++)
-        {
+std::ostream &operator<<(std::ostream &os, const BinomialLattice<T> &Lattice) {
+    for (size_t i = 0; i <= Lattice.size(); i++) {
+        for (size_t j = 0; j < i + 1; j++) {
             os << Lattice[i][j] << " ";
         }
         os << std::endl;

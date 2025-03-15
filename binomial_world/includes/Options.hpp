@@ -1,13 +1,11 @@
 #pragma once
-#include <iostream>
 #include "BinomialModel.hpp"
 
-class Option
-{
-protected:
+class Option {
+   protected:
     size_t N{};
 
-public:
+   public:
     // Option() = default;
     Option(size_t);
     virtual ~Option() = default;
@@ -15,22 +13,20 @@ public:
     virtual double payoff(double) const = 0;
 };
 
-class EurOption : public virtual Option
-{
-public:
+class EurOption : public virtual Option {
+   public:
     // EurOption() = default;
     EurOption(size_t);
 
     double priceByCRR(const BinomialModel &) const;
 };
 
-class AmOption : public virtual Option
-{
-private:
+class AmOption : public virtual Option {
+   private:
     BinomialLattice<double> priceTree;
     BinomialLattice<bool> stoppingTree;
 
-public:
+   public:
     // AmOption() = default;
     AmOption(size_t);
     double PriceBySnell(const BinomialModel &);

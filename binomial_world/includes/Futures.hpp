@@ -1,10 +1,8 @@
 #pragma once
 #include "BinomialModel.hpp"
 
-class Futures : public BinomialModel
-{
-
-public:
+class Futures : public BinomialModel {
+   public:
     Futures() = default;
     Futures(double, double, double, size_t);
 

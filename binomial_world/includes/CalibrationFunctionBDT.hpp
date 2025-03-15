@@ -1,15 +1,15 @@
 #pragma once
-#include "NewtonRaphson.hpp"
-#include <vector>
 #include <cmath>
+#include <vector>
 
-class CalibrationFunctionBDT : public Function
-{
-private:
+#include "NewtonRaphson.hpp"
+
+class CalibrationFunctionBDT : public Function {
+   private:
     std::vector<double> elementary_i;
     double q{}, b{};
 
-public:
+   public:
     CalibrationFunctionBDT(const std::vector<double> &, double, double);
 
     void SetElementary(const std::vector<double> &);
