@@ -25,7 +25,6 @@
 #include "./includes/refactoring_4.hpp"                   // IWYU pragma: keep
 #include "./includes/refactoring_5.hpp"                   // IWYU pragma: keep
 #include "./includes/refactoring_6.hpp"                   // IWYU pragma: keep
-#include "./includes/refactoring_7.hpp"                   // IWYU pragma: keep
 #include "./includes/refactoring_8.hpp"                   // IWYU pragma: keep
 #include "./includes/refactoring_9.hpp"                   // IWYU pragma: keep
 

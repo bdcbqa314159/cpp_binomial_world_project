@@ -2,7 +2,6 @@
 
 #include "refactoring_1.hpp"
 #include "refactoring_5.hpp"
-#include "refactoring_7.hpp"
 
 namespace new_code {
 AmOption::AmOption(size_t newN) : Option(newN), priceTree(N), stoppingTree(N) {}
