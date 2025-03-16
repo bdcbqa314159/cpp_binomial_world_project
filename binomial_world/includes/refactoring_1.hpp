@@ -1,5 +1,6 @@
 #ifndef _REFACTORING_1_HPP_
 #define _REFACTORING_1_HPP_
+#include <cassert>
 #include <iostream>
 #include <vector>
 

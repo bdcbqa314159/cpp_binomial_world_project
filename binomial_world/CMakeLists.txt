@@ -14,7 +14,13 @@ set(sources src/binomial_world.cpp
             src/BinomialModel.cpp
             src/Options.cpp
             src/SingleStrikeOptions.cpp
-            src/Futures.cpp)
+            src/Futures.cpp
+            src/refactoring_2.cpp
+            src/refactoring_3.cpp
+            src/refactoring_4.cpp
+            src/refactoring_6.cpp
+            src/refactoring_7.cpp)
+
 
 add_library(${PROJECT_NAME} ${sources})
 target_include_directories(${PROJECT_NAME} PUBLIC ${includes})
