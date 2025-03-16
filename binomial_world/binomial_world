@@ -1,5 +1,5 @@
-#ifndef _BW_BINOMIAL_WORLD_
-#define _BW_BINOMIAL_WORLD_
+#ifndef _LIBRARY_BINOMIAL_WORLD_
+#define _LIBRARY_BINOMIAL_WORLD_
 
 #include "./includes/BinomialDirections.hpp"              // IWYU pragma: keep
 #include "./includes/BinomialLattice.hpp"                 // IWYU pragma: keep
@@ -18,11 +18,14 @@
 #include "./includes/binomial_world.hpp"                  // IWYU pragma: keep
 #include "./includes/common.hpp"                          // IWYU pragma: keep
 #include "./includes/refactoring_1.hpp"                   // IWYU pragma: keep
+#include "./includes/refactoring_10.hpp"                  // IWYU pragma: keep
 #include "./includes/refactoring_2.hpp"                   // IWYU pragma: keep
 #include "./includes/refactoring_3.hpp"                   // IWYU pragma: keep
 #include "./includes/refactoring_4.hpp"                   // IWYU pragma: keep
 #include "./includes/refactoring_5.hpp"                   // IWYU pragma: keep
 #include "./includes/refactoring_6.hpp"                   // IWYU pragma: keep
 #include "./includes/refactoring_7.hpp"                   // IWYU pragma: keep
+#include "./includes/refactoring_8.hpp"                   // IWYU pragma: keep
+#include "./includes/refactoring_9.hpp"                   // IWYU pragma: keep
 
-#endif  //_BW_BINOMIAL_WORLD_
+#endif  //_LIBRARY_BINOMIAL_WORLD_
