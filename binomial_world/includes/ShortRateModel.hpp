@@ -1,6 +1,4 @@
 #pragma once
-#include <iostream>
-
 #include "BinomialLattice.hpp"
 
 class ShortRateModel {
