@@ -10,7 +10,7 @@ class EurOption : public virtual Option {
    public:
     EurOption(size_t);
 
-    double priceByCRR(const BinomialModelDynamic &) const;
+    double priceByCRR(BinomialModelDynamic &) const;
 };
 
 }  // namespace new_code

@@ -18,11 +18,12 @@ class BinomialModelStock : public BinomialModelDynamic {
     BinomialModelStock(const Stock &, double U, size_t, double);
     double getRiskNeutralProbability() const override;
     double getRiskFreeRate() const override;
+    void buildLattice() override;
 
     size_t getN() const override;
     double getU() const override;
     double getD() const override;
-    double initial_value() const override;
+    // double initial_value() const override;
 };
 
 }  // namespace new_code

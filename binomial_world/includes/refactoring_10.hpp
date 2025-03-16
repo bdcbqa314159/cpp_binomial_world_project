@@ -1,5 +1,5 @@
-#ifndef _REFACTORING_9_HPP_
-#define _REFACTORING_9_HPP_
+#ifndef _REFACTORING_10_HPP_
+#define _REFACTORING_10_HPP_
 
 #include "refactoring_1.hpp"
 #include "refactoring_5.hpp"
@@ -14,11 +14,11 @@ class AmOption : public virtual Option {
 
    public:
     AmOption(size_t);
-    double PriceBySnell(const BinomialModelDynamic &);
+    double PriceBySnell(BinomialModelDynamic &);
     const BinomialLattice<double> &getPriceTree() const { return priceTree; }
     const BinomialLattice<bool> &getStopping() const { return stoppingTree; }
 };
 
 }  // namespace new_code
 
-#endif  //_REFACTORING_9_HPP_
+#endif  //_REFACTORING_10_HPP_

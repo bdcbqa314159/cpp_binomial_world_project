@@ -7,15 +7,15 @@
 namespace new_code {
 AmOption::AmOption(size_t newN) : Option(newN), priceTree(N), stoppingTree(N) {}
 
-double AmOption::PriceBySnell(const BinomialModelDynamic &modelDynamic) {
+double AmOption::PriceBySnell(BinomialModelDynamic &modelDynamic) {
     double q = modelDynamic.getRiskNeutralProbability();
     size_t N = getN();
 
     double continuationValue{};
     double discount = 1. / (1 + modelDynamic.getRiskFreeRate());
 
-    BinomialModelLatticeBuilder myBuilder(modelDynamic);
-    BinomialLattice<double> lattice = myBuilder.getLattice();
+    modelDynamic.buildLattice();
+    BinomialLattice<double> lattice = modelDynamic.getLattice();
 
     for (int i = 0; i <= N; i++) {
         priceTree(N, i, payoff(lattice(N, i)));

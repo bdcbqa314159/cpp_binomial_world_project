@@ -2,19 +2,18 @@
 
 #include "refactoring_1.hpp"
 #include "refactoring_5.hpp"
-#include "refactoring_7.hpp"
 
 namespace new_code {
 EurOption::EurOption(size_t newN) : Option(newN) {}
 
-double EurOption::priceByCRR(const BinomialModelDynamic &modelDynamic) const {
+double EurOption::priceByCRR(BinomialModelDynamic &modelDynamic) const {
     double q = modelDynamic.getRiskNeutralProbability();
     size_t N = getN();
 
     double discount = 1. / (1. + modelDynamic.getRiskFreeRate());
 
-    BinomialModelLatticeBuilder myBuilder(modelDynamic);
-    BinomialLattice<double> lattice = myBuilder.getLattice();
+    modelDynamic.buildLattice();
+    BinomialLattice<double> lattice = modelDynamic.getLattice();
 
     std::vector<double> prices(N + 1);
     for (size_t i = 0; i <= N; ++i) {
