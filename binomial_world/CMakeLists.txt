@@ -20,11 +20,12 @@ set(sources src/binomial_world.cpp
             src/refactoring_4.cpp
             src/refactoring_5.cpp
             src/refactoring_6.cpp
-            # src/refactoring_7.cpp
             src/refactoring_8.cpp
             src/refactoring_9.cpp
             src/refactoring_10.cpp
-            src/refactoring_11.cpp)
+            src/refactoring_11.cpp
+            src/refactoring_12.cpp
+            src/refactoring_13.cpp)
 
 
 add_library(${PROJECT_NAME} ${sources})
