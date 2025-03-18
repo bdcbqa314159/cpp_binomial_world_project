@@ -12,7 +12,10 @@ set(sources src/binomial_world.cpp
             src/BinomialRiskFreeRate.cpp
             src/BinomialRiskNeutralProbability.cpp
             src/Spot.cpp
+            src/Equities.cpp
             src/BinomialModel.cpp
+            src/BinomialModelEquities.cpp
+            src/BinomialModelFutures.cpp
             src/Equity.cpp
             src/Options.cpp
             src/SingleStrikeOptions.cpp

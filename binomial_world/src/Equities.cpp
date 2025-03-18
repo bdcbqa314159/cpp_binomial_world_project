@@ -1,4 +1,4 @@
-#include "Equity.hpp"
+#include "Equities.hpp"
 
 #include <cassert>
 
