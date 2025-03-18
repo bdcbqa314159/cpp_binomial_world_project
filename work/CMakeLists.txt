@@ -6,9 +6,9 @@ add_executable(my_test my_test.cpp)
 target_include_directories(my_test PUBLIC ${includes})
 target_link_libraries(my_test binomial_world)
 
-add_executable(my_stock Stocks.cpp)
-target_include_directories(my_stock PUBLIC ${includes})
-target_link_libraries(my_stock binomial_world)
+add_executable(excel_verifications excel_verifications.cpp)
+target_include_directories(excel_verifications PUBLIC ${includes})
+target_link_libraries(excel_verifications binomial_world)
 
 # add_executable(work main.cpp)
 # target_include_directories(work PUBLIC ${includes})
@@ -29,8 +29,3 @@ target_link_libraries(my_stock binomial_world)
 # add_executable(binomial_test binomial.cpp)
 # target_include_directories(binomial_test PUBLIC ${includes})
 # target_link_libraries(binomial_test binomial_world)
-
-# add_executable(excel_verifications excel_verifications.cpp)
-# target_include_directories(excel_verifications PUBLIC ${includes})
-# target_link_libraries(excel_verifications binomial_world)
-
