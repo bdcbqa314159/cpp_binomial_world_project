@@ -1,4 +1,5 @@
-#pragma once
+#ifndef OPTIONS_HPP
+#define OPTIONS_HPP
 #include "BinomialModel.hpp"
 
 class Option {
@@ -6,19 +7,17 @@ class Option {
     size_t N{};
 
    public:
-    // Option() = default;
     Option(size_t);
     virtual ~Option() = default;
-    size_t getN() const { return N; }
+    size_t getN() const;
     virtual double payoff(double) const = 0;
 };
 
 class EurOption : public virtual Option {
    public:
-    // EurOption() = default;
     EurOption(size_t);
 
-    double priceByCRR(const BinomialModel &) const;
+    double priceByCRR(BinomialModel &) const;
 };
 
 class AmOption : public virtual Option {
@@ -27,9 +26,10 @@ class AmOption : public virtual Option {
     BinomialLattice<bool> stoppingTree;
 
    public:
-    // AmOption() = default;
     AmOption(size_t);
-    double PriceBySnell(const BinomialModel &);
+    double PriceBySnell(BinomialModel &);
     const BinomialLattice<double> &getPriceTree() const { return priceTree; }
     const BinomialLattice<bool> &getStopping() const { return stoppingTree; }
 };
+
+#endif  // OPTIONS_HPP

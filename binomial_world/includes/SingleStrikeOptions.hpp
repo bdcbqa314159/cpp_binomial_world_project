@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SINGLESTRIKEOPTIONS_HPP
+#define SINGLESTRIKEOPTIONS_HPP
 #include "Options.hpp"
 
 class SingleStrike : public EurOption, public AmOption {
@@ -6,21 +7,20 @@ class SingleStrike : public EurOption, public AmOption {
     double K{};
 
    public:
-    // SingleStrike() = default;
     SingleStrike(size_t, double);
-    double getK() const { return K; }
+    double getK() const;
 };
 
 class Call : public SingleStrike {
    public:
-    // Call() = default;
     Call(size_t, double);
     double payoff(double) const override;
 };
 
 class Put : public SingleStrike {
    public:
-    // Put() = default;
     Put(size_t, double);
     double payoff(double) const override;
 };
+
+#endif  // SINGLESTRIKEOPTIONS_HPP
