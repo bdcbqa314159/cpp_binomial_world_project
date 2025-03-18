@@ -1,12 +1,18 @@
-#pragma once
+#ifndef BINOMIALDIRECTIONS_HPP
+#define BINOMIALDIRECTIONS_HPP
+
+#include <cstddef>
 
 class BinomialDirections {
    private:
     double U{}, D{};
+    size_t N{};
 
    public:
-    BinomialDirections() = default;
-    BinomialDirections(double);
-    double getU() const { return U; }
-    double getD() const { return D; }
+    BinomialDirections(double _U, size_t _N);
+    double getU() const;
+    double getD() const;
+    size_t getN() const;
 };
+
+#endif  // BINOMIALDIRECTIONS_HPP
