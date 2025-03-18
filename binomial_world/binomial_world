@@ -23,17 +23,5 @@
 #include "./includes/Spot.hpp"                 // IWYU pragma: keep
 #include "./includes/binomial_world.hpp"       // IWYU pragma: keep
 #include "./includes/common.hpp"               // IWYU pragma: keep
-// #include "./includes/refactoring_1.hpp"        // IWYU pragma: keep
-// #include "./includes/refactoring_10.hpp"       // IWYU pragma: keep
-// #include "./includes/refactoring_11.hpp"       // IWYU pragma: keep
-// #include "./includes/refactoring_12.hpp"       // IWYU pragma: keep
-// #include "./includes/refactoring_13.hpp"       // IWYU pragma: keep
-// #include "./includes/refactoring_2.hpp"        // IWYU pragma: keep
-// #include "./includes/refactoring_3.hpp"        // IWYU pragma: keep
-// #include "./includes/refactoring_4.hpp"        // IWYU pragma: keep
-// #include "./includes/refactoring_5.hpp"        // IWYU pragma: keep
-// #include "./includes/refactoring_6.hpp"        // IWYU pragma: keep
-// #include "./includes/refactoring_8.hpp"        // IWYU pragma: keep
-// #include "./includes/refactoring_9.hpp"        // IWYU pragma: keep
 
 #endif  //_LIBRARY_BINOMIAL_WORLD_
