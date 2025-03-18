@@ -10,6 +10,7 @@
 #include "./includes/CalibrationFunctionBDT.hpp"          // IWYU pragma: keep
 #include "./includes/CalibrationProcess.hpp"              // IWYU pragma: keep
 #include "./includes/ElementaryPrices.hpp"                // IWYU pragma: keep
+#include "./includes/Equity.hpp"                          // IWYU pragma: keep
 #include "./includes/Futures.hpp"                         // IWYU pragma: keep
 #include "./includes/NewtonRaphson.hpp"                   // IWYU pragma: keep
 #include "./includes/Options.hpp"                         // IWYU pragma: keep

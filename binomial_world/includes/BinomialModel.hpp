@@ -1,25 +1,19 @@
 #pragma once
 #include "BinomialLattice.hpp"
-#include "BinomialRiskNeutralProbability.hpp"
-#include "Spot.hpp"
 
 class BinomialModel {
-   private:
-    Spot S0;
+   protected:
     size_t N{};
-    BinomialRiskNeutralProbability q;
     BinomialLattice<double> lattice;
-    bool built{false};
-
-    void buildLattice();
+    bool lattice_built = false;
+    double riskNeutralProbability{};
+    double riskFreeRate{};
 
    public:
-    BinomialModel() = default;
-    BinomialModel(double, double, double, size_t);
+    BinomialModel(size_t);
+    virtual void buildLattice() = 0;
+    double getRiskNeutralProbability() const;
+    double getRiskFreeRate() const;
     size_t getN() const;
-    double getR() const;
-    double riskNeutralProbability() const;
     const BinomialLattice<double> &getLattice() const;
-    BinomialLattice<double> &changeLattice();
-    const double &operator()(size_t, size_t) const;
 };
