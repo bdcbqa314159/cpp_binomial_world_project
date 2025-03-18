@@ -30,3 +30,5 @@ target_link_libraries(binomial_test binomial_world)
 add_executable(excel_verifications excel_verifications.cpp)
 target_include_directories(excel_verifications PUBLIC ${includes})
 target_link_libraries(excel_verifications binomial_world)
+
+add_executable(my_stock Stocks.cpp)

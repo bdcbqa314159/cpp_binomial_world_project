@@ -1,6 +1,9 @@
-#pragma once
+#ifndef BINOMIALLATTICE_HPP
+#define BINOMIALLATTICE_HPP
+
 #include <cassert>
 #include <iostream>
+#include <vector>
 
 // Fundamental block of the binmomial model - the binomial lattice as a data
 // structure
@@ -17,9 +20,7 @@ class BinomialLattice {
 
     size_t size() const;
     const std::vector<T> &operator[](size_t) const;
-    void operator()(size_t, size_t, const T &);
-    T &operator()(size_t, size_t);
-    const T &operator()(size_t, size_t) const;
+    std::vector<T> &operator[](size_t i);
 };
 
 template <typename T>
@@ -42,21 +43,9 @@ const std::vector<T> &BinomialLattice<T>::operator[](size_t i) const {
 }
 
 template <typename T>
-void BinomialLattice<T>::operator()(size_t i, size_t j, const T &x) {
-    assert(i <= N && j <= i);
-    Lattice[i][j] = x;
-}
-
-template <typename T>
-T &BinomialLattice<T>::operator()(size_t i, size_t j) {
-    assert(i <= N && j <= i);
-    return Lattice[i][j];
-}
-
-template <typename T>
-const T &BinomialLattice<T>::operator()(size_t i, size_t j) const {
-    assert(i <= N && j <= i);
-    return Lattice[i][j];
+std::vector<T> &BinomialLattice<T>::operator[](size_t i) {
+    assert(i <= N);
+    return Lattice[i];
 }
 
 template <typename T>
@@ -69,3 +58,5 @@ std::ostream &operator<<(std::ostream &os, const BinomialLattice<T> &Lattice) {
     }
     return os;
 }
+
+#endif  // BINOMIALLATTICE_HPP
