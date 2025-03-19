@@ -10,6 +10,7 @@ class BinomialDirections {
 
    public:
     BinomialDirections(double _U, size_t _N);
+    BinomialDirections(double _U, double _D, size_t _N);
     double getU() const;
     double getD() const;
     size_t getN() const;
