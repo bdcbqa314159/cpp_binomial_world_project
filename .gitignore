@@ -152,3 +152,4 @@ docs
 compile_commands.json
 resources
 work/*.cpp
+build_manual
