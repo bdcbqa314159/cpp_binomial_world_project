@@ -8,29 +8,6 @@
 
 namespace new_code {
 
-class BinomialDirections_new {
-   private:
-    double U{}, D{};
-
-   public:
-    BinomialDirections_new(double _U);
-    BinomialDirections_new(double _U, double _D);
-    double getU() const;
-    double getD() const;
-};
-
-class BinomialDirectionsVolatility : public BinomialDirections_new {
-   private:
-    double sigma{}, T{};
-    size_t periods{};
-
-   public:
-    BinomialDirectionsVolatility(double, double, size_t);
-    double getSigma() const;
-    double getT() const;
-    size_t getPeriods() const;
-};
-
 class RiskFreeRate {
    protected:
     Spot spot;
@@ -146,22 +123,6 @@ class StockDynamic : public BinomialDynamic {
     double getRFR(size_t, size_t) const override;
     void buildLattice() override;
 };
-
-// class StockDynamicVol : public BinomialDynamic {
-//    private:
-//     Stock stock;
-//     RiskFreeRateFlat riskFreeRateFlat;
-//     BinomialDirectionsVolatility model;
-
-//    public:
-//     StockDynamicVol(size_t, const Stock &, const RiskFreeRateFlat &,
-//                     const BinomialDirectionsVolatility &);
-
-//     double getRFR(size_t, size_t) const override;
-//     void buildLattice() override;
-//     // double getRiskNeutralProbability() const;
-//     // size_t getN() const;
-// };
 
 class Option {
    protected:

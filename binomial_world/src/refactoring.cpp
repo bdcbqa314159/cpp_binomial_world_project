@@ -4,41 +4,6 @@
 
 namespace new_code {
 
-BinomialDirections_new::BinomialDirections_new(double _U) : U(_U) {
-    assert(-1. < U && U < 1.);
-    D = -U / (1. + U);
-}
-
-// we need to check the when the tree is not recombining
-BinomialDirections_new::BinomialDirections_new(double _U, double _D)
-    : U(_U), D(_D) {
-    assert(0 < D && D < 1.);
-    assert(0 < U && U < 1.);
-    D = -D;
-}
-
-double BinomialDirections_new::getU() const { return U; }
-double BinomialDirections_new::getD() const { return D; }
-
-double convertToU(double sigma, double T, size_t N) {
-    assert(sigma > 0);
-    assert(T > 0);
-    assert(N > 0);
-
-    return std::exp(sigma * std::sqrt(T / N)) - 1;
-}
-
-BinomialDirectionsVolatility::BinomialDirectionsVolatility(double _sigma,
-                                                           double _T, size_t _N)
-    : BinomialDirections_new(convertToU(_sigma, _T, _N)),
-      sigma(_sigma),
-      T(_T),
-      periods(_N) {}
-
-double BinomialDirectionsVolatility::getSigma() const { return sigma; }
-double BinomialDirectionsVolatility::getT() const { return T; }
-size_t BinomialDirectionsVolatility::getPeriods() const { return periods; }
-
 RiskFreeRate::RiskFreeRate(double _spot) : spot(_spot) {}
 RiskFreeRateFlat::RiskFreeRateFlat(double _spot) : RiskFreeRate(_spot) {}
 double RiskFreeRateFlat::operator()(size_t, size_t) const { return spot(); }
