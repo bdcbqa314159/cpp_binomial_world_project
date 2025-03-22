@@ -27,6 +27,8 @@ StockDynamic::StockDynamic(const Stock &_stock, const RiskFreeRateFlat &_rfr,
     buildLattice();
 }
 
+BinomialLattice<double> BinomialDynamic::getLattice() const { return lattice; }
+
 void StockDynamic::buildLattice() {
     if (lattice_built) return;
     size_t N = model.getN();

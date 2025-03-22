@@ -38,6 +38,7 @@ class BinomialDynamic {
     virtual void buildLattice() = 0;
     double getRiskNeutralProbability() const;
     size_t getN() const;
+    BinomialLattice<double> getLattice() const;
 };
 
 class StockDynamic : public BinomialDynamic {
