@@ -2,6 +2,7 @@
 #define BINOMIALLATTICE_HPP
 
 #include <cassert>
+#include <cstddef>
 #include <iostream>
 #include <vector>
 
@@ -19,9 +20,19 @@ class BinomialLattice {
     BinomialLattice(size_t);
 
     size_t size() const;
+    void resize(size_t newN);
     const std::vector<T> &operator[](size_t) const;
     std::vector<T> &operator[](size_t i);
 };
+
+template <typename T>
+void BinomialLattice<T>::resize(size_t newN) {
+    N = newN;
+    Lattice.resize(N + 1);
+    for (size_t i = 0; i < N + 1; i++) {
+        Lattice[i].resize(i + 1);
+    }
+}
 
 template <typename T>
 BinomialLattice<T>::BinomialLattice(size_t newN) : N(newN) {
