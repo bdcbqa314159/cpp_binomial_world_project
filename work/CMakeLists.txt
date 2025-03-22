@@ -15,6 +15,8 @@ target_include_directories(ShortRates PUBLIC ${includes})
 target_link_libraries(ShortRates binomial_world)
 
 add_executable(my_new_test new_test.cpp)
+target_include_directories(my_new_test PUBLIC ${includes})
+target_link_libraries(my_new_test binomial_world)
 
 # add_executable(work main.cpp)
 # target_include_directories(work PUBLIC ${includes})

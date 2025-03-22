@@ -19,6 +19,7 @@ set(sources src/binomial_world.cpp
             src/Options.cpp
             src/SingleStrikeOptions.cpp
             # src/Futures.cpp
+            src/refactoring.cpp
             )
 
 

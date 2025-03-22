@@ -18,5 +18,6 @@
 #include "./includes/Spot.hpp"                    // IWYU pragma: keep
 #include "./includes/binomial_world.hpp"          // IWYU pragma: keep
 #include "./includes/common.hpp"                  // IWYU pragma: keep
+#include "./includes/refactoring.hpp"             // IWYU pragma: keep
 
 #endif  //_LIBRARY_BINOMIAL_WORLD_
