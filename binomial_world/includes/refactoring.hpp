@@ -20,6 +20,18 @@ class BinomialDirections_new {
     double getD() const;
 };
 
+class BinomialDirectionsVolatility : public BinomialDirections_new {
+   private:
+    double sigma{}, T{};
+    size_t periods{};
+
+   public:
+    BinomialDirectionsVolatility(double, double, size_t);
+    double getSigma() const;
+    double getT() const;
+    size_t getPeriods() const;
+};
+
 class RiskFreeRate {
    protected:
     Spot spot;
@@ -61,6 +73,8 @@ class StockDynamic : public BinomialDynamic {
    public:
     StockDynamic(size_t, const Stock &, const RiskFreeRateFlat &,
                  const BinomialDirections_new &);
+    StockDynamic(size_t, const Stock &, const RiskFreeRateFlat &,
+                 const BinomialDirectionsVolatility &);
 
     double getRFR(size_t, size_t) const override;
     void buildLattice() override;
@@ -117,6 +131,18 @@ class Put : public SingleStrike {
    public:
     Put(size_t, double);
     double payoff(double) const override;
+};
+
+class FuturesDynamic : public BinomialDynamic {
+   private:
+    size_t maturity;
+    BinomialDynamic &primaryAsset;
+
+   public:
+    FuturesDynamic(size_t, BinomialDynamic &);
+    double getRFR(size_t, size_t) const override;
+    void buildLattice() override;
+    double price() const;
 };
 
 }  // namespace new_code

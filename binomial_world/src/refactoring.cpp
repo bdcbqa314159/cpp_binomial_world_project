@@ -1,5 +1,7 @@
 #include "refactoring.hpp"
 
+#include <cstddef>
+
 namespace new_code {
 
 BinomialDirections_new::BinomialDirections_new(double _U) : U(_U) {
@@ -18,9 +20,38 @@ BinomialDirections_new::BinomialDirections_new(double _U, double _D)
 double BinomialDirections_new::getU() const { return U; }
 double BinomialDirections_new::getD() const { return D; }
 
+double convertToU(double sigma, double T, size_t N) {
+    assert(sigma > 0);
+    assert(T > 0);
+    assert(N > 0);
+
+    return std::exp(sigma * std::sqrt(T / N)) - 1;
+}
+
+BinomialDirectionsVolatility::BinomialDirectionsVolatility(double _sigma,
+                                                           double _T, size_t _N)
+    : BinomialDirections_new(convertToU(_sigma, _T, _N)),
+      sigma(_sigma),
+      T(_T),
+      periods(_N) {}
+
+double BinomialDirectionsVolatility::getSigma() const { return sigma; }
+double BinomialDirectionsVolatility::getT() const { return T; }
+size_t BinomialDirectionsVolatility::getPeriods() const { return periods; }
+
 RiskFreeRate::RiskFreeRate(double _spot) : spot(_spot) {}
 RiskFreeRateFlat::RiskFreeRateFlat(double _spot) : RiskFreeRate(_spot) {}
 double RiskFreeRateFlat::operator()(size_t, size_t) const { return spot(); }
+
+double convertToR(const RiskFreeRateFlat &rfr,
+                  const BinomialDirectionsVolatility &model) {
+    double r = rfr(0, 0);
+    double T = model.getT();
+    size_t periods = model.getPeriods();
+
+    double dt = T / periods;
+    return std::exp(r * dt) - 1;
+}
 
 BinomialDynamic::BinomialDynamic(size_t _N) : N(_N), lattice(N) {}
 
@@ -41,6 +72,28 @@ StockDynamic::StockDynamic(size_t size, const Stock &_stock,
     double u = model.getU();
     double c = stock.getDivYield();
     riskNeutralProbability = (_rfr(0, 0) - (d + c)) / (u - d);
+    buildLattice();
+}
+
+StockDynamic::StockDynamic(size_t size, const Stock &_stock,
+                           const RiskFreeRateFlat &_rfr,
+                           const BinomialDirectionsVolatility &_model)
+    : BinomialDynamic(size),
+      stock(_stock),
+      riskFreeRateFlat(convertToR(_rfr, _model)),
+      model(_model) {
+    double d = model.getD();
+    double u = model.getU();
+    double c = stock.getDivYield();
+
+    double T = _model.getT();
+    size_t periods = _model.getPeriods();
+
+    double dt = T / periods;
+
+    double R = std::exp((_rfr(0, 0) - c) * dt) - 1;
+
+    riskNeutralProbability = (R - d) / (u - d);
     buildLattice();
 }
 
@@ -150,5 +203,42 @@ Put::Put(size_t newN, double newK) : Option(newN), SingleStrike(newN, newK) {}
 double Call::payoff(double z) const { return std::max(z - getK(), 0.); }
 
 double Put::payoff(double z) const { return std::max(getK() - z, 0.); }
+
+FuturesDynamic::FuturesDynamic(size_t fut_mat, BinomialDynamic &_primaryAsset)
+    : BinomialDynamic(fut_mat), primaryAsset(_primaryAsset), maturity(fut_mat) {
+    assert(fut_mat <= primaryAsset.getN());
+    riskNeutralProbability = primaryAsset.getRiskNeutralProbability();
+    buildLattice();
+}
+
+double FuturesDynamic::getRFR(size_t n, size_t i) const {
+    return primaryAsset.getRFR(n, i);
+}
+
+void FuturesDynamic::buildLattice() {
+    if (lattice_built) return;
+
+    double q = riskNeutralProbability;
+
+    BinomialLattice<double> primaryLattice = primaryAsset.getLattice();
+
+    for (int i = 0; i <= N; ++i) {
+        lattice[N][i] = primaryLattice[N][i];
+    }
+
+    for (int n = N - 1; n >= 0; --n) {
+        for (int i = 0; i <= n; ++i) {
+            lattice[n][i] =
+                q * lattice[n + 1][i + 1] + (1. - q) * lattice[n + 1][i];
+        }
+    }
+
+    lattice_built = true;
+}
+
+double FuturesDynamic::price() const {
+    assert(lattice_built);
+    return lattice[0][0];
+}
 
 }  // namespace new_code
