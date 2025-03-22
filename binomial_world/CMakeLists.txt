@@ -14,12 +14,15 @@ set(sources src/binomial_world.cpp
             src/Spot.cpp
             src/Equities.cpp
             src/BinomialModel.cpp
-            src/BinomialModelEquities.cpp
-            src/BinomialModelFutures.cpp
+            # src/BinomialModelEquities.cpp
+            # src/BinomialModelFutures.cpp
             src/Options.cpp
             src/SingleStrikeOptions.cpp
             # src/Futures.cpp
             src/refactoring.cpp
+            src/BinomialDynamic.cpp
+            src/BinomialParameters.cpp
+            src/InterestRates.cpp
             )
 
 
