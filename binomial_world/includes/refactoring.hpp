@@ -63,37 +63,105 @@ class BinomialDynamic {
     BinomialLattice<double> getLattice() const;
 };
 
+class BinomialParameters {
+   public:
+    virtual ~BinomialParameters() = default;
+    virtual double getU() const = 0;
+    virtual double getD() const = 0;
+};
+
+class BinomialParametersNoVol : public BinomialParameters {
+   private:
+    double U{}, D{};
+
+   public:
+    BinomialParametersNoVol(double _U) : U(_U) {
+        assert(-1. < U && U < 1.);
+        D = -U / (1. + U);
+    }
+
+    BinomialParametersNoVol(double _U, double _D) : U(_U), D(_D) {
+        assert(0 < D && D < 1.);
+        assert(0 < U && U < 1.);
+        D = -D;
+    }
+
+    double getU() const override { return U; }
+    double getD() const override { return D; }
+};
+
+class BinomialParametersVolGrid : public BinomialParameters {
+   private:
+    double sigma{}, T{};
+    size_t N{};
+
+   public:
+    BinomialParametersVolGrid(double _sigma, double _T, size_t _N)
+        : sigma(_sigma), T(_T), N(_N) {
+        assert(sigma > 0 && T > 0 && N > 0);
+    }
+
+    double getU() const override {
+        return std::exp(sigma * std::sqrt(T / N)) - 1;
+    }
+
+    double getD() const override {
+        double U = getU();
+        return -U / (1. + U);
+    }
+
+    double getSigma() const { return sigma; }
+    double getT() const { return T; }
+    size_t getN() const { return N; }
+
+    double getDeltaT() const { return T / N; }
+};
+
+class MyBinomialModel {
+   private:
+    double U{}, D{};
+
+   public:
+    MyBinomialModel(double _U, double _D) : U(_U), D(_D) {}
+    MyBinomialModel(const BinomialParameters &params)
+        : U(params.getU()), D(params.getD()) {}
+
+    double getU() const { return U; }
+    double getD() const { return D; }
+};
+
 class StockDynamic : public BinomialDynamic {
    private:
     Stock stock;
     RiskFreeRateFlat riskFreeRateFlat;
-    BinomialDirections_new model;
+    MyBinomialModel model;
 
    public:
     StockDynamic(size_t, const Stock &, const RiskFreeRateFlat &,
-                 const BinomialDirections_new &);
+                 const BinomialParametersNoVol &);
+
+    StockDynamic(size_t, const Stock &, const RiskFreeRateFlat &,
+                 const BinomialParametersVolGrid &);
 
     double getRFR(size_t, size_t) const override;
     void buildLattice() override;
-    // double getRiskNeutralProbability() const;
-    // size_t getN() const;
 };
 
-class StockDynamicVol : public BinomialDynamic {
-   private:
-    Stock stock;
-    RiskFreeRateFlat riskFreeRateFlat;
-    BinomialDirectionsVolatility model;
+// class StockDynamicVol : public BinomialDynamic {
+//    private:
+//     Stock stock;
+//     RiskFreeRateFlat riskFreeRateFlat;
+//     BinomialDirectionsVolatility model;
 
-   public:
-    StockDynamicVol(size_t, const Stock &, const RiskFreeRateFlat &,
-                    const BinomialDirectionsVolatility &);
+//    public:
+//     StockDynamicVol(size_t, const Stock &, const RiskFreeRateFlat &,
+//                     const BinomialDirectionsVolatility &);
 
-    double getRFR(size_t, size_t) const override;
-    void buildLattice() override;
-    // double getRiskNeutralProbability() const;
-    // size_t getN() const;
-};
+//     double getRFR(size_t, size_t) const override;
+//     void buildLattice() override;
+//     // double getRiskNeutralProbability() const;
+//     // size_t getN() const;
+// };
 
 class Option {
    protected:

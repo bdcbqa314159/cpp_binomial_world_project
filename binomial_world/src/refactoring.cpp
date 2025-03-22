@@ -44,12 +44,10 @@ RiskFreeRateFlat::RiskFreeRateFlat(double _spot) : RiskFreeRate(_spot) {}
 double RiskFreeRateFlat::operator()(size_t, size_t) const { return spot(); }
 
 double convertToR(const RiskFreeRateFlat &rfr,
-                  const BinomialDirectionsVolatility &model) {
+                  const BinomialParametersVolGrid &binomial_params) {
     double r = rfr(0, 0);
-    double T = model.getT();
-    size_t periods = model.getPeriods();
 
-    double dt = T / periods;
+    double dt = binomial_params.getDeltaT();
     return std::exp(r * dt) - 1;
 }
 
@@ -63,11 +61,11 @@ size_t BinomialDynamic::getN() const { return N; }
 
 StockDynamic::StockDynamic(size_t size, const Stock &_stock,
                            const RiskFreeRateFlat &_rfr,
-                           const BinomialDirections_new &_model)
+                           const BinomialParametersNoVol &binomial_params)
     : BinomialDynamic(size),
       stock(_stock),
       riskFreeRateFlat(_rfr),
-      model(_model) {
+      model(binomial_params) {
     double d = model.getD();
     double u = model.getU();
     double c = stock.getDivYield();
@@ -75,22 +73,19 @@ StockDynamic::StockDynamic(size_t size, const Stock &_stock,
     buildLattice();
 }
 
-StockDynamicVol::StockDynamicVol(size_t size, const Stock &_stock,
-                                 const RiskFreeRateFlat &_rfr,
-                                 const BinomialDirectionsVolatility &_model)
+StockDynamic::StockDynamic(size_t size, const Stock &_stock,
+                           const RiskFreeRateFlat &_rfr,
+                           const BinomialParametersVolGrid &binomial_params)
     : BinomialDynamic(size),
       stock(_stock),
-      riskFreeRateFlat(convertToR(_rfr, _model)),
-      model(_model) {
-    assert(size == model.getPeriods());
+      riskFreeRateFlat(convertToR(_rfr, binomial_params)),
+      model(binomial_params) {
+    assert(size == binomial_params.getN());
     double d = model.getD();
     double u = model.getU();
     double c = stock.getDivYield();
 
-    double T = model.getT();
-    size_t periods = model.getPeriods();
-
-    double dt = T / periods;
+    double dt = binomial_params.getDeltaT();
 
     double R = std::exp((_rfr(0, 0) - c) * dt) - 1;
 
@@ -118,29 +113,7 @@ void StockDynamic::buildLattice() {
     lattice_built = true;
 }
 
-void StockDynamicVol::buildLattice() {
-    if (lattice_built) return;
-
-    lattice[0][0] = stock.getSpot();
-    double d = model.getD();
-    double u = model.getU();
-
-    for (size_t i = 1; i <= N; i++) {
-        for (size_t j = 0; j < i + 1; j++) {
-            if (j == 0)
-                lattice[i][j] = lattice[i - 1][j] * (1. + d);
-            else
-                lattice[i][j] = lattice[i - 1][j - 1] * (1. + u);
-        }
-    }
-    lattice_built = true;
-}
-
 double StockDynamic::getRFR(size_t i, size_t j) const {
-    return riskFreeRateFlat(0, 0);  // we assumed rfr constant
-}
-
-double StockDynamicVol::getRFR(size_t i, size_t j) const {
     return riskFreeRateFlat(0, 0);  // we assumed rfr constant
 }
 
