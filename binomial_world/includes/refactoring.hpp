@@ -2,7 +2,6 @@
 #ifndef BINOMIAL_WORLD_REFACTORING_HPP
 #define BINOMIAL_WORLD_REFACTORING_HPP
 
-#include "BinomialDirections.hpp"
 #include "BinomialLattice.hpp"
 #include "Equities.hpp"
 #include "Spot.hpp"
@@ -73,13 +72,27 @@ class StockDynamic : public BinomialDynamic {
    public:
     StockDynamic(size_t, const Stock &, const RiskFreeRateFlat &,
                  const BinomialDirections_new &);
-    StockDynamic(size_t, const Stock &, const RiskFreeRateFlat &,
-                 const BinomialDirectionsVolatility &);
 
     double getRFR(size_t, size_t) const override;
     void buildLattice() override;
-    double getRiskNeutralProbability() const;
-    size_t getN() const;
+    // double getRiskNeutralProbability() const;
+    // size_t getN() const;
+};
+
+class StockDynamicVol : public BinomialDynamic {
+   private:
+    Stock stock;
+    RiskFreeRateFlat riskFreeRateFlat;
+    BinomialDirectionsVolatility model;
+
+   public:
+    StockDynamicVol(size_t, const Stock &, const RiskFreeRateFlat &,
+                    const BinomialDirectionsVolatility &);
+
+    double getRFR(size_t, size_t) const override;
+    void buildLattice() override;
+    // double getRiskNeutralProbability() const;
+    // size_t getN() const;
 };
 
 class Option {
