@@ -9,6 +9,17 @@
 
 namespace new_code {
 
+class BinomialDirections_new {
+   private:
+    double U{}, D{};
+
+   public:
+    BinomialDirections_new(double _U);
+    BinomialDirections_new(double _U, double _D);
+    double getU() const;
+    double getD() const;
+};
+
 class RiskFreeRate {
    protected:
     Spot spot;
@@ -45,16 +56,67 @@ class StockDynamic : public BinomialDynamic {
    private:
     Stock stock;
     RiskFreeRateFlat riskFreeRateFlat;
-    BinomialDirections model;
+    BinomialDirections_new model;
 
    public:
-    StockDynamic(const Stock &, const RiskFreeRateFlat &,
-                 const BinomialDirections &);
+    StockDynamic(size_t, const Stock &, const RiskFreeRateFlat &,
+                 const BinomialDirections_new &);
 
     double getRFR(size_t, size_t) const override;
     void buildLattice() override;
     double getRiskNeutralProbability() const;
     size_t getN() const;
+};
+
+class Option {
+   protected:
+    size_t N{};
+
+   public:
+    Option(size_t);
+    virtual ~Option() = default;
+    size_t getN() const;
+    virtual double payoff(double) const = 0;
+};
+
+class EurOption : public virtual Option {
+   public:
+    EurOption(size_t);
+
+    double priceByCRR(BinomialDynamic &) const;
+};
+
+class AmOption : public virtual Option {
+   private:
+    BinomialLattice<double> priceTree;
+    BinomialLattice<bool> stoppingTree;
+
+   public:
+    AmOption(size_t);
+    double PriceBySnell(BinomialDynamic &);
+    const BinomialLattice<double> &getPriceTree() const { return priceTree; }
+    const BinomialLattice<bool> &getStopping() const { return stoppingTree; }
+};
+
+class SingleStrike : public EurOption, public AmOption {
+   protected:
+    double K{};
+
+   public:
+    SingleStrike(size_t, double);
+    double getK() const;
+};
+
+class Call : public SingleStrike {
+   public:
+    Call(size_t, double);
+    double payoff(double) const override;
+};
+
+class Put : public SingleStrike {
+   public:
+    Put(size_t, double);
+    double payoff(double) const override;
 };
 
 }  // namespace new_code
