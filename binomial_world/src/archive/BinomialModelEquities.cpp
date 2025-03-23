@@ -1,3 +1,4 @@
+#if 0
 #include "BinomialModelEquities.hpp"
 
 BinomialModelStock::BinomialModelStock(const Stock &_stock,
@@ -53,3 +54,4 @@ void BinomialModelStock::buildLattice() {
     }
     lattice_built = true;
 }
+#endif
