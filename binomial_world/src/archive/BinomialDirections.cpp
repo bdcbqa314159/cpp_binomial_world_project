@@ -1,3 +1,4 @@
+#if 0
 #include "BinomialDirections.hpp"
 
 #include <cassert>
@@ -18,3 +19,4 @@ BinomialDirections::BinomialDirections(double _U, double _D, size_t _N)
 double BinomialDirections::getU() const { return U; }
 double BinomialDirections::getD() const { return D; }
 size_t BinomialDirections::getN() const { return N; }
+#endif

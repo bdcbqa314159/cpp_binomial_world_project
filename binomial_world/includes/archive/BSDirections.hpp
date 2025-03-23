@@ -1,3 +1,4 @@
+#if 0
 #ifndef BSDIRECTIONS_HPP
 #define BSDIRECTIONS_HPP
 
@@ -21,3 +22,4 @@ class BSDirections {
 };
 
 #endif  // BSDIRECTIONS_HPP
+#endif

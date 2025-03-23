@@ -1,3 +1,4 @@
+#if 0
 #ifndef BINOMIALMODEL_FUTURES_HPP
 #define BINOMIALMODEL_FUTURES_HPP
 
@@ -13,3 +14,4 @@ class BinomialModelFutures : public BinomialModel {
 };
 
 #endif  // BINOMIALMODEL_FUTURES_HPP
+#endif

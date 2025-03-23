@@ -1,3 +1,4 @@
+#if 0
 #ifndef BINOMIALMODELEQUITIES_HPP
 #define BINOMIALMODELEQUITIES_HPP
 
@@ -22,3 +23,4 @@ class BinomialModelStock : public BinomialModel {
 };
 
 #endif  // BINOMIALMODELEQUITIES_HPP
+#endif

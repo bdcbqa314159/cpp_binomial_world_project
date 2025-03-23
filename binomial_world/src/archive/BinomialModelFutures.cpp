@@ -1,3 +1,4 @@
+#if 0
 #include "BinomialModelFutures.hpp"
 
 BinomialModelFutures::BinomialModelFutures(BinomialModel &primaryAssetModel)
@@ -25,3 +26,4 @@ double BinomialModelFutures::price() {
     buildLattice();
     return lattice[0][0];
 }
+#endif

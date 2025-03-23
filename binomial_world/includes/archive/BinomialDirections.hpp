@@ -1,3 +1,4 @@
+#if 0
 #ifndef BINOMIALDIRECTIONS_HPP
 #define BINOMIALDIRECTIONS_HPP
 
@@ -17,3 +18,4 @@ class BinomialDirections {
 };
 
 #endif  // BINOMIALDIRECTIONS_HPP
+#endif

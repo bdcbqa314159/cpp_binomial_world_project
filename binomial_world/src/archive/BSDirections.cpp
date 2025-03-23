@@ -1,3 +1,4 @@
+#if 0
 #include "BSDirections.hpp"
 
 #include <cassert>
@@ -25,3 +26,4 @@ double BSDirections::getU() const {
     double dt = T / N;
     return std::exp(sigma * std::sqrt(dt)) - 1.;
 }
+#endif
