@@ -2,6 +2,7 @@
 #ifndef BINOMIAL_WORLD_REFACTORING_HPP
 #define BINOMIAL_WORLD_REFACTORING_HPP
 
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -102,7 +103,7 @@ class TimeToMaturity : public PositiveReal {
     TimeToMaturity(double);
 };
 
-class Size : public PositiveInteger {
+class Size : public IntegerValue {
    public:
     Size(size_t);
 };
@@ -110,6 +111,21 @@ class Size : public PositiveInteger {
 class MaturityInPeriods : public PositiveInteger {
    public:
     MaturityInPeriods(size_t);
+};
+
+class DividendYield : public PositiveReal {
+   public:
+    DividendYield(double);
+};
+
+class ShortRateSpot : public RealValue {
+   public:
+    ShortRateSpot(double);
+};
+
+class Probability : public RealValue {
+   public:
+    Probability(double);
 };
 
 }  // namespace binomial_values
@@ -204,7 +220,7 @@ class BinomialParameters {
     virtual double getD() const = 0;
 };
 
-class BinomialParametersNoVol : public BinomialParameters {
+class BinomialParametersNoVol : public binomial_parameters::BinomialParameters {
    private:
     UpFactor U;
     DownFactor D;
@@ -218,7 +234,8 @@ class BinomialParametersNoVol : public BinomialParameters {
     double getD() const override;
 };
 
-class BinomialParametersVolGrid : public BinomialParameters {
+class BinomialParametersVolGrid
+    : public binomial_parameters::BinomialParameters {
    private:
     Volatility sigma;
     TimeToMaturity T;
@@ -237,5 +254,115 @@ class BinomialParametersVolGrid : public BinomialParameters {
     double getD() const override;
 };
 }  // namespace binomial_parameters
+
+namespace binomial_model {
+
+using namespace binomial_parameters;
+
+class BinomialModel {
+   private:
+    UpFactor U;
+    DownFactor D;
+
+   public:
+    BinomialModel(double, double);
+    BinomialModel(const binomial_parameters::BinomialParameters &);
+
+    double getU() const;
+    double getD() const;
+};
+
+}  // namespace binomial_model
+
+namespace binomial_equities {
+
+using namespace binomial_values;
+
+class Stock {
+   private:
+    StockSpot spot;
+    DividendYield div_yield;
+
+   public:
+    Stock(double, double = 0.);
+
+    double getDivYield() const;
+    double getSpot() const;
+    void setDivYield(double);
+    void setSpot(double);
+};
+}  // namespace binomial_equities
+
+namespace binomial_interest_rates {
+
+using namespace binomial_values;
+
+class ShortRate {
+   protected:
+    ShortRateSpot spot;
+
+   public:
+    ShortRate(double);
+    double getSpot() const;
+    void setSpot(double);
+};
+}  // namespace binomial_interest_rates
+
+namespace binomial_dynamic {
+
+using namespace binomial_values;
+using namespace binomial_lattice;
+using namespace binomial_parameters;
+using namespace binomial_model;
+using namespace binomial_equities;
+using namespace binomial_interest_rates;
+
+class BinomialDynamic {
+   protected:
+    Size N;
+    Probability riskNeutralProbability;
+    BinomialLatticeNumeric lattice;
+    bool lattice_built = false;
+
+   public:
+    BinomialDynamic();
+    BinomialDynamic(size_t);
+    virtual double getRFR(size_t, size_t) const = 0;
+    virtual void buildLattice() = 0;
+    double getRiskNeutralProbability() const;
+    size_t getN() const;
+    const BinomialLatticeNumeric &getLattice() const;
+};
+
+class RiskFreeRateFlat : public BinomialDynamic {
+   private:
+    ShortRate shortRate;
+
+   public:
+    RiskFreeRateFlat(double);
+    double getRFR(size_t, size_t) const override;
+    void buildLattice() override;
+};
+
+class StockDynamic : public BinomialDynamic {
+   private:
+    binomial_equities::Stock stock;
+    binomial_dynamic::RiskFreeRateFlat riskFreeRateFlat;
+    BinomialModel model;
+
+   public:
+    StockDynamic(size_t, const binomial_equities::Stock &,
+                 const binomial_dynamic::RiskFreeRateFlat &,
+                 const binomial_parameters::BinomialParametersNoVol &);
+
+    StockDynamic(size_t, const binomial_equities::Stock &,
+                 const binomial_dynamic::RiskFreeRateFlat &,
+                 const binomial_parameters::BinomialParametersVolGrid &);
+
+    double getRFR(size_t, size_t) const override;
+    void buildLattice() override;
+};
+
+}  // namespace binomial_dynamic
 
 #endif  // BINOMIAL_WORLD_REFACTORING_HPP
