@@ -2,9 +2,9 @@ project(work)
 
 set(includes ./ ../binomial_world/)
 
-# add_executable(my_test my_test.cpp)
-# target_include_directories(my_test PUBLIC ${includes})
-# target_link_libraries(my_test binomial_world)
+add_executable(my_test my_test.cpp)
+target_include_directories(my_test PUBLIC ${includes})
+target_link_libraries(my_test binomial_world)
 
 add_executable(excel_verifications excel_verifications.cpp)
 target_include_directories(excel_verifications PUBLIC ${includes})
