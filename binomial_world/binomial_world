@@ -17,6 +17,8 @@
 // #include "./includes/refactoring.hpp"             // IWYU pragma: keep
 #include "./includes/BinomialDynamic.hpp"            // IWYU pragma: keep
 #include "./includes/BinomialParameters.hpp"         // IWYU pragma: keep
+#include "./includes/BinomialValues.hpp"             // IWYU pragma: keep
+#include "./includes/BinomialValuesTemplate.hpp"     // IWYU pragma: keep
 #include "./includes/InterestRates.hpp"              // IWYU pragma: keep
 #include "./includes/RiskFreeRateTermStructure.hpp"  // IWYU pragma: keep
 #include "./includes/ZeroCouponBondDynamic.hpp"      // IWYU pragma: keep
