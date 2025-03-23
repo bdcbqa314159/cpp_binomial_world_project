@@ -1,7 +1,7 @@
 project(binomial_world)
 
 set(includes includes/)
-set(sources src/binomial_world.cpp
+set(sources src/Binomial_World.cpp
             # src/ShortRateModel.cpp
             # src/ElementaryPrices.cpp
             # src/NewtonRaphson.cpp
@@ -11,20 +11,20 @@ set(sources src/binomial_world.cpp
             # src/BSDirections.cpp
             # src/BinomialRiskFreeRate.cpp
             # src/BinomialRiskNeutralProbability.cpp
-            src/Spot.cpp
-            src/Equities.cpp
-            src/BinomialModel.cpp
+            # src/Spot.cpp
+            # src/Equities.cpp
+            # src/BinomialModel.cpp
             # src/BinomialModelEquities.cpp
             # src/BinomialModelFutures.cpp
-            src/Options.cpp
-            src/SingleStrikeOptions.cpp
+            # src/Options.cpp
+            # src/SingleStrikeOptions.cpp
             # src/Futures.cpp
             src/refactoring.cpp
-            src/BinomialDynamic.cpp
-            src/BinomialParameters.cpp
-            src/InterestRates.cpp
-            src/RiskFreeRateTermStructure.cpp
-            src/ZeroCouponBondDynamic.cpp
+            # src/BinomialDynamic.cpp
+            # src/BinomialParameters.cpp
+            # src/InterestRates.cpp
+            # src/RiskFreeRateTermStructure.cpp
+            # src/ZeroCouponBondDynamic.cpp
             # src/BinomialValues.cpp
             )
 

@@ -245,4 +245,9 @@ void StockDynamic::buildLattice() {
     lattice_built = true;
 }
 
+double StockDynamic::getRFR(size_t i, size_t j) const {
+    assert(i <= j);
+    return riskFreeRateFlat.getRFR(0, 0);
+}
+
 }  // namespace binomial_dynamic
