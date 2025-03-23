@@ -23,6 +23,8 @@ set(sources src/binomial_world.cpp
             src/BinomialDynamic.cpp
             src/BinomialParameters.cpp
             src/InterestRates.cpp
+            src/RiskFreeRateTermStructure.cpp
+            src/ZeroCouponBondDynamic.cpp
             )
 
 

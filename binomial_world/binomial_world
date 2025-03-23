@@ -1,12 +1,8 @@
 #ifndef _LIBRARY_BINOMIAL_WORLD_
 #define _LIBRARY_BINOMIAL_WORLD_
 
-// #include "./includes/BSDirections.hpp"  // IWYU pragma: keep
-// #include "./includes/BinomialDirections.hpp"  // IWYU pragma: keep
-#include "./includes/BinomialLattice.hpp"  // IWYU pragma: keep
-#include "./includes/BinomialModel.hpp"    // IWYU pragma: keep
-// #include "./includes/BinomialModelEquities.hpp"   // IWYU pragma: keep
-// #include "./includes/BinomialModelFutures.hpp"    // IWYU pragma: keep
+#include "./includes/BinomialLattice.hpp"         // IWYU pragma: keep
+#include "./includes/BinomialModel.hpp"           // IWYU pragma: keep
 #include "./includes/CalibrationFunctionBDT.hpp"  // IWYU pragma: keep
 #include "./includes/CalibrationProcess.hpp"      // IWYU pragma: keep
 #include "./includes/ElementaryPrices.hpp"        // IWYU pragma: keep
@@ -19,8 +15,10 @@
 #include "./includes/binomial_world.hpp"          // IWYU pragma: keep
 #include "./includes/common.hpp"                  // IWYU pragma: keep
 // #include "./includes/refactoring.hpp"             // IWYU pragma: keep
-#include "./includes/BinomialDynamic.hpp"     // IWYU pragma: keep
-#include "./includes/BinomialParameters.hpp"  // IWYU pragma: keep
-#include "./includes/InterestRates.hpp"       // IWYU pragma: keep
+#include "./includes/BinomialDynamic.hpp"            // IWYU pragma: keep
+#include "./includes/BinomialParameters.hpp"         // IWYU pragma: keep
+#include "./includes/InterestRates.hpp"              // IWYU pragma: keep
+#include "./includes/RiskFreeRateTermStructure.hpp"  // IWYU pragma: keep
+#include "./includes/ZeroCouponBondDynamic.hpp"      // IWYU pragma: keep
 
 #endif  //_LIBRARY_BINOMIAL_WORLD_
