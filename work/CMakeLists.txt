@@ -10,9 +10,9 @@ add_executable(excel_verifications excel_verifications.cpp)
 target_include_directories(excel_verifications PUBLIC ${includes})
 target_link_libraries(excel_verifications binomial_world)
 
-# add_executable(ShortRates ShortRates.cpp)
-# target_include_directories(ShortRates PUBLIC ${includes})
-# target_link_libraries(ShortRates binomial_world)
+add_executable(ShortRates ShortRates.cpp)
+target_include_directories(ShortRates PUBLIC ${includes})
+target_link_libraries(ShortRates binomial_world)
 
 add_executable(my_new_test new_test.cpp)
 target_include_directories(my_new_test PUBLIC ${includes})

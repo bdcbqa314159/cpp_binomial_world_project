@@ -1,9 +1,11 @@
+#pragma once
 #ifndef BINOMIALLATTICE_HPP
 #define BINOMIALLATTICE_HPP
 
 #include <cassert>
 #include <cstddef>
 #include <iostream>
+#include <ostream>
 #include <vector>
 
 // Fundamental block of the binmomial model - the binomial lattice as a data
