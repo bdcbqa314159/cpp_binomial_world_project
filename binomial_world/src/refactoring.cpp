@@ -102,7 +102,7 @@ double BinomialParametersVolGrid::getDeltaT() const { return T() / N(); }
 
 double BinomialParametersVolGrid::getU() const {
     double dt = getDeltaT();
-    return std::exp(sigma() * dt) - 1;
+    return std::exp(sigma() * std::sqrt(dt)) - 1;
 }
 
 double BinomialParametersVolGrid::getD() const {
@@ -220,6 +220,9 @@ StockDynamic::StockDynamic(
     double d = model.getD();
     double div_yield = stock.getDivYield();
     double r = riskFreeRateFlat.getRFR(0, 0);
+
+    double newR = std::exp(r * params.getDeltaT()) - 1;
+    riskFreeRateFlat = RiskFreeRateFlat(newR);
 
     double dt = params.getDeltaT();
 
@@ -350,3 +353,45 @@ double Call::payoff(double z) const { return std::max(z - K(), 0.); }
 double Put::payoff(double z) const { return std::max(K() - z, 0.); }
 
 }  // namespace binomial_options
+
+namespace binomial_dynamic {
+
+FuturesDynamic::FuturesDynamic(size_t fut_mat, BinomialDynamic &_primaryAsset)
+    : BinomialDynamic(fut_mat), primaryAsset(_primaryAsset), maturity(fut_mat) {
+    assert(maturity() <= primaryAsset.getN());
+    riskNeutralProbability = primaryAsset.getRiskNeutralProbability();
+    buildLattice();
+}
+
+double FuturesDynamic::getRFR(size_t n, size_t i) const {
+    return primaryAsset.getRFR(n, i);
+}
+
+void FuturesDynamic::buildLattice() {
+    if (lattice_built) return;
+
+    double q = riskNeutralProbability();
+
+    BinomialLatticeNumeric primaryLattice = primaryAsset.getLattice();
+
+    size_t N = maturity();
+
+    for (int i = 0; i <= N; ++i) {
+        lattice[N][i] = primaryLattice[N][i];
+    }
+
+    for (int n = N - 1; n >= 0; --n) {
+        for (int i = 0; i <= n; ++i) {
+            lattice[n][i] =
+                q * lattice[n + 1][i + 1] + (1. - q) * lattice[n + 1][i];
+        }
+    }
+
+    lattice_built = true;
+}
+
+double FuturesDynamic::price() const {
+    assert(lattice_built);
+    return lattice[0][0];
+}
+}  // namespace binomial_dynamic

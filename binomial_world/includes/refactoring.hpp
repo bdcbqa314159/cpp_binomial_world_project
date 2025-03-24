@@ -429,4 +429,19 @@ class Put : public SingleStrike {
 
 }  // namespace binomial_options
 
+namespace binomial_dynamic {
+
+class FuturesDynamic : public BinomialDynamic {
+   private:
+    MaturityInPeriods maturity;
+    BinomialDynamic &primaryAsset;
+
+   public:
+    FuturesDynamic(size_t, BinomialDynamic &);
+    double getRFR(size_t, size_t) const override;
+    void buildLattice() override;
+    double price() const;
+};
+}  // namespace binomial_dynamic
+
 #endif  // BINOMIAL_WORLD_REFACTORING_HPP
