@@ -128,6 +128,11 @@ class Probability : public RealValue {
     Probability(double);
 };
 
+class Strike : public PositiveReal {
+   public:
+    Strike(double);
+};
+
 }  // namespace binomial_values
 
 namespace binomial_lattice {
@@ -364,5 +369,64 @@ class StockDynamic : public BinomialDynamic {
 };
 
 }  // namespace binomial_dynamic
+
+namespace binomial_options {
+
+using namespace binomial_values;
+using namespace binomial_lattice;
+using namespace binomial_dynamic;
+
+class Option {
+   protected:
+    MaturityInPeriods maturity;
+
+   public:
+    Option(size_t);
+    virtual ~Option() = default;
+    size_t getMaturity() const;
+    virtual double payoff(double) const = 0;
+};
+
+class EurOption : public virtual Option {
+   public:
+    EurOption(size_t);
+
+    double priceByCRR(BinomialDynamic &) const;
+};
+
+class AmOption : public virtual Option {
+   private:
+    BinomialLatticeNumeric priceTree;
+    BinomialLatticeBoolean stoppingTree;
+
+   public:
+    AmOption(size_t);
+    double priceBySnell(BinomialDynamic &);
+    const BinomialLatticeNumeric &getPriceTree() const { return priceTree; }
+    const BinomialLatticeBoolean &getStopping() const { return stoppingTree; }
+};
+
+class SingleStrike : public EurOption, public AmOption {
+   protected:
+    Strike K;
+
+   public:
+    SingleStrike(size_t, double);
+    double getK() const;
+};
+
+class Call : public SingleStrike {
+   public:
+    Call(size_t, double);
+    double payoff(double) const override;
+};
+
+class Put : public SingleStrike {
+   public:
+    Put(size_t, double);
+    double payoff(double) const override;
+};
+
+}  // namespace binomial_options
 
 #endif  // BINOMIAL_WORLD_REFACTORING_HPP

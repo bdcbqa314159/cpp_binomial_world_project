@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <cstddef>
 
 namespace binomial_lattice {
 
@@ -63,6 +64,8 @@ ShortRateSpot::ShortRateSpot(double newValue) : RealValue(newValue) {}
 Probability::Probability(double newValue) : RealValue(newValue) {
     assert(newValue >= 0. && newValue <= 1.);
 }
+
+Strike::Strike(double newValue) : PositiveReal(newValue) {}
 
 }  // namespace binomial_values
 
@@ -200,7 +203,7 @@ StockDynamic::StockDynamic(
     double div_yield = stock.getDivYield();
     double r = riskFreeRateFlat.getRFR(0, 0);
 
-    riskNeutralProbability(r - (d + div_yield) / (u - d));
+    riskNeutralProbability((r - (d + div_yield)) / (u - d));
 
     buildLattice();
 }
@@ -246,8 +249,104 @@ void StockDynamic::buildLattice() {
 }
 
 double StockDynamic::getRFR(size_t i, size_t j) const {
-    assert(i <= j);
+    assert(j <= i);
     return riskFreeRateFlat.getRFR(0, 0);
 }
 
 }  // namespace binomial_dynamic
+
+namespace binomial_options {
+
+using namespace binomial_values;
+using namespace binomial_lattice;
+using namespace binomial_dynamic;
+
+Option::Option(size_t newMaturity) : maturity(newMaturity) {}
+size_t Option::getMaturity() const { return maturity(); }
+
+EurOption::EurOption(size_t newMaturity) : Option(newMaturity) {}
+
+double EurOption::priceByCRR(BinomialDynamic &modelDynamic) const {
+    double q = modelDynamic.getRiskNeutralProbability();
+    assert(maturity() <= modelDynamic.getN());
+    BinomialLatticeNumeric lattice = modelDynamic.getLattice();
+
+    size_t N = maturity();
+
+    std::vector<double> prices(N + 1);
+    for (size_t i = 0; i <= N; ++i) {
+        prices[i] = payoff(lattice[N][i]);
+    }
+
+    for (int n = N - 1; n >= 0; --n) {
+        for (size_t i = 0; i <= n; ++i) {
+            double rfr_n_i = modelDynamic.getRFR(n, i);
+            double discount_n_i = 1. / (1. + rfr_n_i);
+
+            prices[i] =
+                discount_n_i * (q * prices[i + 1] + (1 - q) * prices[i]);
+        }
+    }
+
+    return prices[0];
+}
+
+AmOption::AmOption(size_t newMaturity)
+    : Option(newMaturity), priceTree(maturity()), stoppingTree(maturity()) {}
+
+double AmOption::priceBySnell(BinomialDynamic &modelDynamic) {
+    double q = modelDynamic.getRiskNeutralProbability();
+
+    assert(maturity() <= modelDynamic.getN());
+
+    double continuationValue{};
+
+    BinomialLatticeNumeric lattice = modelDynamic.getLattice();
+    size_t N = maturity();
+
+    for (int i = 0; i <= N; i++) {
+        priceTree[N][i] = payoff(lattice[N][i]);
+        stoppingTree[N][i] = true;
+    }
+
+    for (int n = N - 1; n >= 0; --n) {
+        for (int i = 0; i <= n; ++i) {
+            double rfr_n_i = modelDynamic.getRFR(n, i);
+            double discount_n_i = 1. / (1. + rfr_n_i);
+
+            continuationValue = discount_n_i * (q * priceTree[n + 1][i + 1] +
+                                                (1. - q) * priceTree[n + 1][i]);
+
+            priceTree[n][i] = payoff(lattice[n][i]);
+            stoppingTree[n][i] = true;
+
+            if (continuationValue > priceTree[n][i]) {
+                priceTree[n][i] = continuationValue;
+                stoppingTree[n][i] = false;
+            } else if (priceTree[n][i] == 0.) {
+                stoppingTree[n][i] = false;
+            }
+        }
+    }
+    return priceTree[0][0];
+}
+
+SingleStrike::SingleStrike(size_t newMaturity, double newK)
+    : Option(newMaturity),
+      EurOption(newMaturity),
+      AmOption(newMaturity),
+      K(newK) {}
+
+double SingleStrike::getK() const { return K(); }
+
+Call::Call(size_t newMaturity, double newK)
+    : Option(newMaturity), SingleStrike(newMaturity, newK) {}
+
+Put::Put(size_t newMaturity, double newK)
+    : Option(newMaturity), SingleStrike(newMaturity, newK) {}
+
+double Call::payoff(double z) const { return std::max(z - K(), 0.); }
+
+double Put::payoff(double z) const { return std::max(K() - z, 0.); }
+
+}  // namespace binomial_options
