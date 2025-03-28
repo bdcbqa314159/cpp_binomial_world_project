@@ -19,13 +19,15 @@ set(sources src/Binomial_World.cpp
             # src/Options.cpp
             # src/SingleStrikeOptions.cpp
             # src/Futures.cpp
-            src/refactoring.cpp
+            # src/refactoring.cpp
             # src/BinomialDynamic.cpp
             # src/BinomialParameters.cpp
             # src/InterestRates.cpp
             # src/RiskFreeRateTermStructure.cpp
             # src/ZeroCouponBondDynamic.cpp
             # src/BinomialValues.cpp
+            # src/refactoring_bis.cpp
+            src/refactoring_ter.cpp
             )
 
 

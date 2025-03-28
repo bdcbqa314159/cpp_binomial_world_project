@@ -26,7 +26,7 @@ class BinomialLattice {
 template <typename T>
 BinomialLattice<T>::BinomialLattice(size_t newPeriods) : periods(newPeriods) {
     lattice.resize(periods + 1);
-    for (size_t i = 0; i < periods; i++) {
+    for (size_t i = 0; i <= periods; i++) {
         lattice[i].resize(i + 1);
     }
 }
