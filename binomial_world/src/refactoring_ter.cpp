@@ -4,37 +4,6 @@
 
 namespace new_code_bis {
 
-// void latticeBuilder(double initial_value, double u, double d, size_t periods,
-//                     BinomialLattice<double> &lattice) {
-//     lattice[0][0] = initial_value;
-
-//     for (size_t i = 1; i <= periods; i++) {
-//         for (size_t j = 0; j < i + 1; j++) {
-//             if (j == 0)
-//                 lattice[i][j] = lattice[i - 1][j] * d;
-//             else
-//                 lattice[i][j] = lattice[i - 1][j - 1] * u;
-//         }
-//     }
-// }
-
-VolGridAdapter::VolGridAdapter(const BinomialVolGrid &newVolGrid)
-    : volGrid(newVolGrid) {
-    double dt = getDeltaT();
-    double sigma = volGrid.getSigma();
-    double u = std::exp(sigma * std::sqrt(dt));
-    double d = 1 / u;
-
-    setDirections(u, d);
-}
-
-double VolGridAdapter::getSigma() const { return volGrid.getSigma(); }
-double VolGridAdapter::getTimeToMaturity() const {
-    return volGrid.getTimeToMaturity();
-}
-size_t VolGridAdapter::getPeriods() const { return volGrid.getPeriods(); }
-double VolGridAdapter::getDeltaT() const { return volGrid.getDeltaT(); }
-
 Numeric::Numeric(double newValue) : value(newValue) {}
 
 double Numeric::operator()() const { return value; }

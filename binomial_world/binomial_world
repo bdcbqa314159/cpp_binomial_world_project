@@ -26,6 +26,7 @@
 // #include "./includes/refactoring.hpp"      // IWYU pragma: keep
 // #include "./includes/refactoring_bis.hpp"  // IWYU pragma: keep
 #include "./includes/Utils.hpp"            // IWYU pragma: keep
+#include "./includes/VolGridAdapter.hpp"   // IWYU pragma: keep
 #include "./includes/refactoring_ter.hpp"  // IWYU pragma: keep
 
 #endif  //_LIBRARY_BINOMIAL_WORLD_

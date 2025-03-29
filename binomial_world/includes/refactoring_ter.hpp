@@ -10,24 +10,9 @@
 #include "BinomialVolGrid.hpp"
 #include "Common.hpp"
 #include "Utils.hpp"
+#include "VolGridAdapter.hpp"
 
 namespace new_code_bis {
-
-class VolGridAdapter : public BinomialDirections {
-   private:
-    BinomialVolGrid volGrid;
-
-   public:
-    VolGridAdapter(const BinomialVolGrid &);
-    double getSigma() const;
-    double getTimeToMaturity() const;
-    size_t getPeriods() const;
-
-    double getDeltaT() const;
-};
-
-// void latticeBuilder(double, double, double, size_t, BinomialLattice<double>
-// &);
 
 class Numeric {
    protected:
