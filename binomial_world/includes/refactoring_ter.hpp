@@ -9,24 +9,12 @@
 #include "BinomialLattice.hpp"
 #include "BinomialVolGrid.hpp"
 #include "Common.hpp"
+#include "Equities.hpp"
 #include "Numeric.hpp"
 #include "Utils.hpp"
 #include "VolGridAdapter.hpp"
 
 namespace new_code_bis {
-
-class Stock {
-   private:
-    Spot spot;
-    DividendYield div_yield;
-
-   public:
-    Stock(double, double = 0.);
-    double getDivYield() const;
-    double getSpot() const;
-    void setDivYield(double);
-    void setSpot(double);
-};
 
 class ShortRate {
    private:

@@ -1,18 +1,20 @@
-#ifndef EQUITY_HPP
-#define EQUITY_HPP
+#pragma once
+#ifndef EQUITIES_HPP
+#define EQUITIES_HPP
+
+#include "Numeric.hpp"
 
 class Stock {
    private:
-    double spot{};
-    double div_yield{};
+    Spot spot;
+    DividendYield div_yield;
 
    public:
     Stock(double, double = 0.);
-
     double getDivYield() const;
-    double getSpot() const { return spot; }
-    void setDivYield(double _div_yield);
-    void setSpot(double _spot);
+    double getSpot() const;
+    void setDivYield(double);
+    void setSpot(double);
 };
 
-#endif  // EQUITY_HPP
+#endif  // EQUITIES_HPP
