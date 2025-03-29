@@ -4,52 +4,19 @@
 
 namespace new_code_bis {
 
-// BinomialDirections::BinomialDirections(double newU) : u(newU) {
-//     assert(0. < u);
-//     d = 1 / u;
+// void latticeBuilder(double initial_value, double u, double d, size_t periods,
+//                     BinomialLattice<double> &lattice) {
+//     lattice[0][0] = initial_value;
+
+//     for (size_t i = 1; i <= periods; i++) {
+//         for (size_t j = 0; j < i + 1; j++) {
+//             if (j == 0)
+//                 lattice[i][j] = lattice[i - 1][j] * d;
+//             else
+//                 lattice[i][j] = lattice[i - 1][j - 1] * u;
+//         }
+//     }
 // }
-
-// BinomialDirections::BinomialDirections(double newU, double newD)
-//     : u(newU), d(newD) {
-//     assert(0. < d && d < u);
-// }
-
-// double BinomialDirections::getU() const { return u; }
-// double BinomialDirections::getD() const { return d; }
-
-// void BinomialDirections::setDirections(double newU, double newD) {
-//     u = newU;
-//     d = newD;
-
-//     assert(0. < d && d < u);
-// }
-
-// BinomialVolGrid::BinomialVolGrid(double newSigma, double newTimeToMaturity,
-//                                  size_t newPeriods)
-//     : sigma(newSigma), timeToMaturity(newTimeToMaturity), periods(newPeriods)
-//     { assert(sigma > 0. && timeToMaturity > 0. && periods > 0);
-// }
-
-// double BinomialVolGrid::getSigma() const { return sigma; }
-// double BinomialVolGrid::getTimeToMaturity() const { return timeToMaturity; }
-// size_t BinomialVolGrid::getPeriods() const { return periods; }
-
-// double BinomialVolGrid::getDeltaT() const { return timeToMaturity / periods;
-// }
-
-void latticeBuilder(double initial_value, double u, double d, size_t periods,
-                    BinomialLattice<double> &lattice) {
-    lattice[0][0] = initial_value;
-
-    for (size_t i = 1; i <= periods; i++) {
-        for (size_t j = 0; j < i + 1; j++) {
-            if (j == 0)
-                lattice[i][j] = lattice[i - 1][j] * d;
-            else
-                lattice[i][j] = lattice[i - 1][j - 1] * u;
-        }
-    }
-}
 
 VolGridAdapter::VolGridAdapter(const BinomialVolGrid &newVolGrid)
     : volGrid(newVolGrid) {

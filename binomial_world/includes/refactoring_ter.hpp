@@ -9,23 +9,9 @@
 #include "BinomialLattice.hpp"
 #include "BinomialVolGrid.hpp"
 #include "Common.hpp"
+#include "Utils.hpp"
 
 namespace new_code_bis {
-
-// class BinomialDirections {
-//    private:
-//     double u{}, d{};
-
-//    public:
-//     BinomialDirections() = default;
-//     BinomialDirections(double);
-//     BinomialDirections(double, double);
-
-//     double getU() const;
-//     double getD() const;
-
-//     void setDirections(double, double);
-// };
 
 class VolGridAdapter : public BinomialDirections {
    private:
@@ -40,7 +26,8 @@ class VolGridAdapter : public BinomialDirections {
     double getDeltaT() const;
 };
 
-void latticeBuilder(double, double, double, size_t, BinomialLattice<double> &);
+// void latticeBuilder(double, double, double, size_t, BinomialLattice<double>
+// &);
 
 class Numeric {
    protected:
