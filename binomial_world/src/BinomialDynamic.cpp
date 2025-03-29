@@ -42,12 +42,13 @@ StockDynamic::StockDynamic(size_t newPeriods, const Stock &newStock,
     double div_yield = stock.getDivYield();
     // The logic of this is in the resolution of the Exercise 2.10 of the book
     // Stochastic Calculus for Finance I: The Binomial Asset Pricing Model
+    // After re reading: the dynamic is impacted by the dividend but not the
+    // risk neutral probability
     model.setDirections(u * (1 - div_yield), d * (1 - div_yield));
 
     double r = riskFreeRateFlat.getRFR(0, 0);
 
-    riskNeutralProbability((1 + r - model.getD()) /
-                           (model.getU() - model.getD()));
+    riskNeutralProbability((1 + r - d) / (u - d));
 
     buildLattice();
 }
