@@ -6,24 +6,25 @@
 #include <vector>
 
 #include "BinomialLattice.hpp"
+#include "BinomialVolGrid.hpp"
 #include "Common.hpp"
 
 namespace new_code_bis {
 
-class BinomialVolGrid {
-   private:
-    double sigma, timeToMaturity;
-    size_t periods;
+// class BinomialVolGrid {
+//    private:
+//     double sigma, timeToMaturity;
+//     size_t periods;
 
-   public:
-    BinomialVolGrid(double, double, size_t);
+//    public:
+//     BinomialVolGrid(double, double, size_t);
 
-    double getSigma() const;
-    double getTimeToMaturity() const;
-    size_t getPeriods() const;
+//     double getSigma() const;
+//     double getTimeToMaturity() const;
+//     size_t getPeriods() const;
 
-    double getDeltaT() const;
-};
+//     double getDeltaT() const;
+// };
 
 class BinomialDirections {
    private:

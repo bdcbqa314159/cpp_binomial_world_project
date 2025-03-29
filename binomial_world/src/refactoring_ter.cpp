@@ -24,17 +24,18 @@ void BinomialDirections::setDirections(double newU, double newD) {
     assert(0. < d && d < u);
 }
 
-BinomialVolGrid::BinomialVolGrid(double newSigma, double newTimeToMaturity,
-                                 size_t newPeriods)
-    : sigma(newSigma), timeToMaturity(newTimeToMaturity), periods(newPeriods) {
-    assert(sigma > 0. && timeToMaturity > 0. && periods > 0);
-}
+// BinomialVolGrid::BinomialVolGrid(double newSigma, double newTimeToMaturity,
+//                                  size_t newPeriods)
+//     : sigma(newSigma), timeToMaturity(newTimeToMaturity), periods(newPeriods)
+//     { assert(sigma > 0. && timeToMaturity > 0. && periods > 0);
+// }
 
-double BinomialVolGrid::getSigma() const { return sigma; }
-double BinomialVolGrid::getTimeToMaturity() const { return timeToMaturity; }
-size_t BinomialVolGrid::getPeriods() const { return periods; }
+// double BinomialVolGrid::getSigma() const { return sigma; }
+// double BinomialVolGrid::getTimeToMaturity() const { return timeToMaturity; }
+// size_t BinomialVolGrid::getPeriods() const { return periods; }
 
-double BinomialVolGrid::getDeltaT() const { return timeToMaturity / periods; }
+// double BinomialVolGrid::getDeltaT() const { return timeToMaturity / periods;
+// }
 
 void latticeBuilder(double initial_value, double u, double d, size_t periods,
                     BinomialLattice<double> &lattice) {
