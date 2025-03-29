@@ -4,11 +4,6 @@
 
 namespace new_code_bis {
 
-ShortRate::ShortRate(double newSpot) : spot(newSpot) {}
-
-double ShortRate::getSpot() const { return spot(); }
-void ShortRate::setSpot(double newSpot) { spot(newSpot); }
-
 BinomialDynamic::BinomialDynamic(size_t newPeriods)
     : periods(newPeriods), lattice(newPeriods) {}
 

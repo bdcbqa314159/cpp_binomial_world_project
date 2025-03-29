@@ -10,21 +10,12 @@
 #include "BinomialVolGrid.hpp"
 #include "Common.hpp"
 #include "Equities.hpp"
+#include "InterestRates.hpp"
 #include "Numeric.hpp"
 #include "Utils.hpp"
 #include "VolGridAdapter.hpp"
 
 namespace new_code_bis {
-
-class ShortRate {
-   private:
-    Spot spot;
-
-   public:
-    ShortRate(double);
-    double getSpot() const;
-    void setSpot(double);
-};
 
 class BinomialDynamic {
    protected:

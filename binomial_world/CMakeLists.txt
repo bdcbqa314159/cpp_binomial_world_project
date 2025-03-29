@@ -22,7 +22,7 @@ set(sources src/Binomial_World.cpp
             # src/refactoring.cpp
             # src/BinomialDynamic.cpp
             # src/BinomialParameters.cpp
-            # src/InterestRates.cpp
+            src/InterestRates.cpp
             # src/RiskFreeRateTermStructure.cpp
             # src/ZeroCouponBondDynamic.cpp
             # src/BinomialValues.cpp
