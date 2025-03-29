@@ -93,7 +93,7 @@ double StockDynamic::getRFR(size_t i, size_t j) const {
 }
 
 FuturesDynamic::FuturesDynamic(size_t fut_mat, BinomialDynamic &_primaryAsset)
-    : BinomialDynamic(fut_mat), primaryAsset(_primaryAsset), maturity(fut_mat) {
+    : BinomialDynamic(fut_mat), maturity(fut_mat), primaryAsset(_primaryAsset) {
     assert(maturity <= primaryAsset.getPeriods());
     riskNeutralProbability = primaryAsset.getRiskNeutralProbability();
     buildLattice();
