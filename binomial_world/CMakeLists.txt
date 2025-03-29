@@ -20,7 +20,7 @@ set(sources src/Binomial_World.cpp
             # src/SingleStrikeOptions.cpp
             # src/Futures.cpp
             # src/refactoring.cpp
-            # src/BinomialDynamic.cpp
+            src/BinomialDynamic.cpp
             # src/BinomialParameters.cpp
             src/InterestRates.cpp
             # src/RiskFreeRateTermStructure.cpp

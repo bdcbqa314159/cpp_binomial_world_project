@@ -1,82 +1,99 @@
 #include "BinomialDynamic.hpp"
 
-BinomialDynamic::BinomialDynamic(size_t _N) : N(_N), lattice(N) {}
+#include "Utils.hpp"
+
+BinomialDynamic::BinomialDynamic(size_t newPeriods)
+    : periods(newPeriods), lattice(newPeriods) {}
 
 double BinomialDynamic::getRiskNeutralProbability() const {
-    return riskNeutralProbability;
+    return riskNeutralProbability();
 }
 
-size_t BinomialDynamic::getN() const { return N; }
+size_t BinomialDynamic::getPeriods() const { return periods; }
 
-BinomialLattice<double> BinomialDynamic::getLattice() const { return lattice; }
-
-double convertToR(const RiskFreeRateFlat &rfr,
-                  const BinomialParametersVolGrid &binomial_params) {
-    double r = rfr(0, 0);
-
-    double dt = binomial_params.getDeltaT();
-    return std::exp(r * dt) - 1;
+const BinomialLattice<double> &BinomialDynamic::getLattice() const {
+    return lattice;
 }
 
-StockDynamic::StockDynamic(size_t size, const Stock &_stock,
-                           const RiskFreeRateFlat &_rfr,
-                           const BinomialParametersNoVol &binomial_params)
-    : BinomialDynamic(size),
-      stock(_stock),
-      riskFreeRateFlat(_rfr),
-      model(binomial_params) {
-    double d = model.getD();
-    double u = model.getU();
-    double c = stock.getDivYield();
-    riskNeutralProbability = (_rfr(0, 0) - (d + c)) / (u - d);
+RiskFreeRateFlat::RiskFreeRateFlat(double newSpot)
+    : BinomialDynamic(), shortRate(newSpot) {
     buildLattice();
 }
 
-StockDynamic::StockDynamic(size_t size, const Stock &_stock,
-                           const RiskFreeRateFlat &_rfr,
-                           const BinomialParametersVolGrid &binomial_params)
-    : BinomialDynamic(size),
-      stock(_stock),
-      riskFreeRateFlat(convertToR(_rfr, binomial_params)),
-      model(binomial_params) {
-    assert(size == binomial_params.getN());
-    double d = model.getD();
+double RiskFreeRateFlat::getRFR(size_t i, size_t j) const {
+    assert(j <= i);
+    return shortRate.getSpot();
+}
+
+void RiskFreeRateFlat::buildLattice() {
+    lattice[0][0] = shortRate.getSpot();
+    lattice_built = true;
+}
+
+StockDynamic::StockDynamic(size_t newPeriods, const Stock &newStock,
+                           const RiskFreeRateFlat &newRiskFreeRateFlat,
+                           const BinomialDirections &newModel)
+    : BinomialDynamic(newPeriods),
+      stock(newStock),
+      riskFreeRateFlat(newRiskFreeRateFlat),
+      model(newModel) {
     double u = model.getU();
-    double c = stock.getDivYield();
+    double d = model.getD();
+    double div_yield = stock.getDivYield();
+    // The logic of this is in the resolution of the Exercise 2.10 of the book
+    // Stochastic Calculus for Finance I: The Binomial Asset Pricing Model
+    model.setDirections(u * (1 - div_yield), d * (1 - div_yield));
 
-    double dt = binomial_params.getDeltaT();
+    double r = riskFreeRateFlat.getRFR(0, 0);
 
-    double R = std::exp((_rfr(0, 0) - c) * dt) - 1;
+    riskNeutralProbability((1 + r - model.getD()) /
+                           (model.getU() - model.getD()));
 
-    riskNeutralProbability = (R - d) / (u - d);
+    buildLattice();
+}
+
+StockDynamic::StockDynamic(size_t newPeriods, const Stock &newStock,
+                           const RiskFreeRateFlat &newRiskFreeRateFlat,
+                           const VolGridAdapter &params)
+    : BinomialDynamic(newPeriods),
+      stock(newStock),
+      riskFreeRateFlat(newRiskFreeRateFlat) {
+    double u = params.getU();
+    double d = params.getD();
+    double div_yield = stock.getDivYield();
+    double r = riskFreeRateFlat.getRFR(0, 0);
+
+    double newR = std::exp(r * params.getDeltaT()) - 1;
+    riskFreeRateFlat = RiskFreeRateFlat(newR);
+
+    double dt = params.getDeltaT();
+
+    double r_cont = std::exp((r - div_yield) * dt);
+
+    riskNeutralProbability((r_cont - d) / (u - d));
+    model.setDirections(u, d);
+
     buildLattice();
 }
 
 void StockDynamic::buildLattice() {
     if (lattice_built) return;
 
-    lattice[0][0] = stock.getSpot();
-    double d = model.getD();
-    double u = model.getU();
+    double initial_value = stock.getSpot();
 
-    for (size_t i = 1; i <= N; i++) {
-        for (size_t j = 0; j < i + 1; j++) {
-            if (j == 0)
-                lattice[i][j] = lattice[i - 1][j] * (1. + d);
-            else
-                lattice[i][j] = lattice[i - 1][j - 1] * (1. + u);
-        }
-    }
+    latticeBuilder(initial_value, model.getU(), model.getD(), periods, lattice);
+
     lattice_built = true;
 }
 
 double StockDynamic::getRFR(size_t i, size_t j) const {
-    return riskFreeRateFlat(0, 0);  // we assumed rfr constant
+    assert(j <= i);
+    return riskFreeRateFlat.getRFR(0, 0);
 }
 
 FuturesDynamic::FuturesDynamic(size_t fut_mat, BinomialDynamic &_primaryAsset)
     : BinomialDynamic(fut_mat), primaryAsset(_primaryAsset), maturity(fut_mat) {
-    assert(fut_mat <= primaryAsset.getN());
+    assert(maturity <= primaryAsset.getPeriods());
     riskNeutralProbability = primaryAsset.getRiskNeutralProbability();
     buildLattice();
 }
@@ -88,9 +105,9 @@ double FuturesDynamic::getRFR(size_t n, size_t i) const {
 void FuturesDynamic::buildLattice() {
     if (lattice_built) return;
 
-    double q = riskNeutralProbability;
-
+    double q = riskNeutralProbability();
     BinomialLattice<double> primaryLattice = primaryAsset.getLattice();
+    size_t N = maturity;
 
     for (int i = 0; i <= N; ++i) {
         lattice[N][i] = primaryLattice[N][i];

@@ -2,41 +2,51 @@
 #ifndef BINOMIAL_WORLD_BINOMIALDYNAMIC_HPP
 #define BINOMIAL_WORLD_BINOMIALDYNAMIC_HPP
 
+#include "BinomialDirections.hpp"
 #include "BinomialLattice.hpp"
-#include "BinomialModel.hpp"
 #include "Equities.hpp"
 #include "InterestRates.hpp"
+#include "Numeric.hpp"
+#include "VolGridAdapter.hpp"
 
 class BinomialDynamic {
    protected:
-    size_t N{};
-    double riskNeutralProbability{};
-    BinomialLattice<double> lattice;
+    size_t periods{0};
+    Probability riskNeutralProbability{1.};
+    BinomialLattice<double> lattice{1};
     bool lattice_built = false;
 
    public:
+    BinomialDynamic() = default;
     BinomialDynamic(size_t);
     virtual double getRFR(size_t, size_t) const = 0;
     virtual void buildLattice() = 0;
     double getRiskNeutralProbability() const;
-    size_t getN() const;
-    BinomialLattice<double> getLattice() const;
+    size_t getPeriods() const;
+    const BinomialLattice<double> &getLattice() const;
 };
 
-double convertToR(const RiskFreeRateFlat &, const BinomialParametersVolGrid &);
+class RiskFreeRateFlat : public BinomialDynamic {
+   private:
+    ShortRate shortRate;
+
+   public:
+    RiskFreeRateFlat(double);
+    double getRFR(size_t, size_t) const override;
+    void buildLattice() override;
+};
 
 class StockDynamic : public BinomialDynamic {
    private:
     Stock stock;
     RiskFreeRateFlat riskFreeRateFlat;
-    MyBinomialModel model;
+    BinomialDirections model;
 
    public:
     StockDynamic(size_t, const Stock &, const RiskFreeRateFlat &,
-                 const BinomialParametersNoVol &);
-
+                 const BinomialDirections &);
     StockDynamic(size_t, const Stock &, const RiskFreeRateFlat &,
-                 const BinomialParametersVolGrid &);
+                 const VolGridAdapter &);
 
     double getRFR(size_t, size_t) const override;
     void buildLattice() override;
