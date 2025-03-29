@@ -16,7 +16,7 @@ set(sources src/Binomial_World.cpp
             # src/BinomialModel.cpp
             # src/BinomialModelEquities.cpp
             # src/BinomialModelFutures.cpp
-            # src/Options.cpp
+            src/Options.cpp
             # src/SingleStrikeOptions.cpp
             # src/Futures.cpp
             # src/refactoring.cpp

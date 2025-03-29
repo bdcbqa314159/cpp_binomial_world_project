@@ -13,7 +13,7 @@
 #include "./includes/Equities.hpp"       // IWYU pragma: keep
 #include "./includes/InterestRates.hpp"  // IWYU pragma: keep
 // #include "./includes/NewtonRaphson.hpp"              // IWYU pragma: keep
-// #include "./includes/Options.hpp"                    // IWYU pragma: keep
+#include "./includes/Options.hpp"  // IWYU pragma: keep
 // #include "./includes/RiskFreeRateTermStructure.hpp"  // IWYU pragma: keep
 // #include "./includes/ShortRateModel.hpp"             // IWYU pragma: keep
 // #include "./includes/SingleStrikeOptions.hpp"        // IWYU pragma: keep
