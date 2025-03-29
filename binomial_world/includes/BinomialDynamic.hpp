@@ -4,6 +4,7 @@
 
 #include "BinomialDirections.hpp"
 #include "BinomialLattice.hpp"
+#include "CouponPayment.hpp"
 #include "Equities.hpp"
 #include "InterestRates.hpp"
 #include "Numeric.hpp"
@@ -20,6 +21,7 @@ class BinomialDynamic {
     BinomialDynamic() = default;
     BinomialDynamic(size_t);
     virtual double getRFR(size_t, size_t) const = 0;
+    virtual double getCouponPayment(size_t) const = 0;
     virtual void buildLattice() = 0;
     double getRiskNeutralProbability() const;
     size_t getPeriods() const;
@@ -33,6 +35,7 @@ class RiskFreeRateFlat : public BinomialDynamic {
    public:
     RiskFreeRateFlat(double);
     double getRFR(size_t, size_t) const override;
+    double getCouponPayment(size_t) const override;
     void buildLattice() override;
 };
 
@@ -49,6 +52,7 @@ class StockDynamic : public BinomialDynamic {
                  const VolGridAdapter &);
 
     double getRFR(size_t, size_t) const override;
+    double getCouponPayment(size_t) const override;
     void buildLattice() override;
 };
 
@@ -60,6 +64,7 @@ class FuturesDynamic : public BinomialDynamic {
    public:
     FuturesDynamic(size_t, BinomialDynamic &);
     double getRFR(size_t, size_t) const override;
+    double getCouponPayment(size_t) const override;
     void buildLattice() override;
     double price() const;
 };
@@ -72,6 +77,7 @@ class RiskFreeRateTerm : public BinomialDynamic {
    public:
     RiskFreeRateTerm(size_t, const ShortRate &, const BinomialDirections &);
     double getRFR(size_t, size_t) const override;
+    double getCouponPayment(size_t) const override;
     void buildLattice() override;
 };
 
@@ -84,6 +90,23 @@ class ZeroCouponBondDynamic : public BinomialDynamic {
    public:
     ZeroCouponBondDynamic(size_t, RiskFreeRateTerm &, double = 1.);
     double getRFR(size_t, size_t) const override;
+    double getCouponPayment(size_t) const override;
+    void buildLattice() override;
+    double price() const;
+};
+
+class CouponBearingBondDynamic : public BinomialDynamic {
+   private:
+    size_t maturity = 0;
+    RiskFreeRateTerm primaryAsset;
+    CouponPayment couponPayment;
+    double faceValue = 1.;
+
+   public:
+    CouponBearingBondDynamic(size_t, RiskFreeRateTerm &, double, double,
+                             size_t = 1);
+    double getRFR(size_t, size_t) const override;
+    double getCouponPayment(size_t n) const override;
     void buildLattice() override;
     double price() const;
 };

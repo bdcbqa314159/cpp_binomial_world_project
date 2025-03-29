@@ -22,3 +22,7 @@ Probability::Probability(double newValue) : Numeric(newValue) {
 }
 
 Strike::Strike(double newValue) : Numeric(newValue) { assert(newValue >= 0.); }
+
+Coupon::Coupon(double _value) : Numeric(_value) { assert(_value > 0.); }
+
+FaceValue::FaceValue(double _value) : Numeric(_value) { assert(_value > 0.); }

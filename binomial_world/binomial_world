@@ -7,6 +7,8 @@
 #include "./includes/BinomialVolGrid.hpp"      // IWYU pragma: keep
 #include "./includes/Binomial_World.hpp"       // IWYU pragma: keep
 #include "./includes/Common.hpp"               // IWYU pragma: keep
+#include "./includes/CouponParameters.hpp"     // IWYU pragma: keep
+#include "./includes/CouponPayment.hpp"        // IWYU pragma: keep
 #include "./includes/Equities.hpp"             // IWYU pragma: keep
 #include "./includes/InterestRates.hpp"        // IWYU pragma: keep
 #include "./includes/Numeric.hpp"              // IWYU pragma: keep

@@ -12,6 +12,8 @@ set(sources src/Binomial_World.cpp
             src/Utils.cpp
             src/VolGridAdapter.cpp
             src/Numeric.cpp
+            src/CouponParameters.cpp
+            src/CouponPayment.cpp
             # src/ShortRateModel.cpp
             # src/ElementaryPrices.cpp
             # src/NewtonRaphson.cpp

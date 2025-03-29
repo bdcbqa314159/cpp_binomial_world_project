@@ -32,4 +32,14 @@ class Strike : public Numeric {
     Strike(double);
 };
 
+class Coupon : public Numeric {
+   public:
+    Coupon(double);
+};
+
+class FaceValue : public Numeric {
+   public:
+    FaceValue(double);
+};
+
 #endif  // NUMERIC_HPP

@@ -25,6 +25,8 @@ double RiskFreeRateFlat::getRFR(size_t i, size_t j) const {
     return shortRate.getSpot();
 }
 
+double RiskFreeRateFlat::getCouponPayment(size_t n) const { return 0.; }
+
 void RiskFreeRateFlat::buildLattice() {
     lattice[0][0] = shortRate.getSpot();
     lattice_built = true;
@@ -92,6 +94,10 @@ double StockDynamic::getRFR(size_t i, size_t j) const {
     return riskFreeRateFlat.getRFR(0, 0);
 }
 
+double StockDynamic::getCouponPayment(size_t n) const {
+    return 0.;
+}  // check against dividends
+
 FuturesDynamic::FuturesDynamic(size_t fut_mat, BinomialDynamic &_primaryAsset)
     : BinomialDynamic(fut_mat), maturity(fut_mat), primaryAsset(_primaryAsset) {
     assert(maturity <= primaryAsset.getPeriods());
@@ -103,6 +109,8 @@ double FuturesDynamic::getRFR(size_t n, size_t i) const {
     return primaryAsset.getRFR(n, i);
 }
 
+double FuturesDynamic::getCouponPayment(size_t n) const { return 0.; }
+
 void FuturesDynamic::buildLattice() {
     if (lattice_built) return;
 
@@ -111,7 +119,7 @@ void FuturesDynamic::buildLattice() {
     size_t N = maturity;
 
     for (int i = 0; i <= N; ++i) {
-        lattice[N][i] = primaryLattice[N][i];
+        lattice[N][i] = primaryLattice[N][i] - primaryAsset.getCouponPayment(N);
     }
 
     for (int n = N - 1; n >= 0; --n) {
@@ -152,6 +160,8 @@ double RiskFreeRateTerm::getRFR(size_t i, size_t j) const {
     return lattice[i][j];
 }
 
+double RiskFreeRateTerm::getCouponPayment(size_t n) const { return 0.; }
+
 ZeroCouponBondDynamic::ZeroCouponBondDynamic(size_t bond_maturity,
                                              RiskFreeRateTerm &_primaryAsset,
                                              double _faceValue)
@@ -167,6 +177,8 @@ ZeroCouponBondDynamic::ZeroCouponBondDynamic(size_t bond_maturity,
 double ZeroCouponBondDynamic::getRFR(size_t n, size_t i) const {
     return primaryAsset.getRFR(n, i);
 }
+
+double ZeroCouponBondDynamic::getCouponPayment(size_t n) const { return 0.; }
 
 void ZeroCouponBondDynamic::buildLattice() {
     if (lattice_built) return;
@@ -190,6 +202,54 @@ void ZeroCouponBondDynamic::buildLattice() {
 }
 
 double ZeroCouponBondDynamic::price() const {
+    assert(lattice_built);
+    return lattice[0][0];
+}
+
+CouponBearingBondDynamic::CouponBearingBondDynamic(
+    size_t _maturity, RiskFreeRateTerm &_primaryAsset, double _coupon,
+    double _face_value, size_t _coupon_frequency)
+    : BinomialDynamic(_maturity),
+      maturity(_maturity),
+      primaryAsset(_primaryAsset),
+      couponPayment(_coupon, _face_value, _maturity, _coupon_frequency),
+      faceValue(_face_value) {
+    assert(maturity <= primaryAsset.getPeriods() + 1);
+    riskNeutralProbability = primaryAsset.getRiskNeutralProbability();
+    buildLattice();
+}
+
+double CouponBearingBondDynamic::getRFR(size_t n, size_t i) const {
+    return primaryAsset.getRFR(n, i);
+}
+
+double CouponBearingBondDynamic::getCouponPayment(size_t n) const {
+    return couponPayment(n);
+}
+
+void CouponBearingBondDynamic::buildLattice() {
+    if (lattice_built) return;
+
+    double q = riskNeutralProbability();
+
+    for (int i = 0; i <= maturity; ++i) {
+        lattice[maturity][i] = faceValue + couponPayment(i);
+    }
+
+    for (int n = maturity - 1; n >= 0; --n) {
+        for (int i = 0; i <= n; ++i) {
+            double discount_n_i = 1. / (1 + getRFR(n, i));
+
+            lattice[n][i] =
+                (q * lattice[n + 1][i + 1] + (1. - q) * lattice[n + 1][i]) *
+                    discount_n_i +
+                couponPayment(i);
+        }
+    }
+    lattice_built = true;
+}
+
+double CouponBearingBondDynamic::price() const {
     assert(lattice_built);
     return lattice[0][0];
 }
