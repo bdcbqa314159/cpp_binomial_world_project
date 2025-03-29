@@ -5,41 +5,27 @@
 #include <iostream>
 #include <vector>
 
+#include "BinomialDirections.hpp"
 #include "BinomialLattice.hpp"
 #include "BinomialVolGrid.hpp"
 #include "Common.hpp"
 
 namespace new_code_bis {
 
-// class BinomialVolGrid {
+// class BinomialDirections {
 //    private:
-//     double sigma, timeToMaturity;
-//     size_t periods;
+//     double u{}, d{};
 
 //    public:
-//     BinomialVolGrid(double, double, size_t);
+//     BinomialDirections() = default;
+//     BinomialDirections(double);
+//     BinomialDirections(double, double);
 
-//     double getSigma() const;
-//     double getTimeToMaturity() const;
-//     size_t getPeriods() const;
+//     double getU() const;
+//     double getD() const;
 
-//     double getDeltaT() const;
+//     void setDirections(double, double);
 // };
-
-class BinomialDirections {
-   private:
-    double u{}, d{};
-
-   public:
-    BinomialDirections() = default;
-    BinomialDirections(double);
-    BinomialDirections(double, double);
-
-    double getU() const;
-    double getD() const;
-
-    void setDirections(double, double);
-};
 
 class VolGridAdapter : public BinomialDirections {
    private:

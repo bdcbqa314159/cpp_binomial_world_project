@@ -7,7 +7,7 @@ set(sources src/Binomial_World.cpp
             # src/NewtonRaphson.cpp
             # src/CalibrationFunctionBDT.cpp
             # src/CalibrationProcess.cpp
-            # src/BinomialDirections.cpp
+            src/BinomialDirections.cpp
             # src/BSDirections.cpp
             # src/BinomialRiskFreeRate.cpp
             # src/BinomialRiskNeutralProbability.cpp
