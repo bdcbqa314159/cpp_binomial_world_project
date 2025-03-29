@@ -111,4 +111,17 @@ class CouponBearingBondDynamic : public BinomialDynamic {
     double price() const;
 };
 
+class ForwardsDynamic : public BinomialDynamic {
+   private:
+    size_t maturity;
+    BinomialDynamic &primaryAsset;
+
+   public:
+    ForwardsDynamic(size_t, BinomialDynamic &);
+    double getRFR(size_t, size_t) const override;
+    double getCouponPayment(size_t) const override;
+    void buildLattice() override;
+    double price() const;
+};
+
 #endif  // BINOMIAL_WORLD_BINOMIALDYNAMIC_HPP
