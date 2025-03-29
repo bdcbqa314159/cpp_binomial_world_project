@@ -24,6 +24,18 @@ void BinomialDirections::setDirections(double newU, double newD) {
     assert(0. < d && d < u);
 }
 
+BinomialVolGrid::BinomialVolGrid(double newSigma, double newTimeToMaturity,
+                                 size_t newPeriods)
+    : sigma(newSigma), timeToMaturity(newTimeToMaturity), periods(newPeriods) {
+    assert(sigma > 0. && timeToMaturity > 0. && periods > 0);
+}
+
+double BinomialVolGrid::getSigma() const { return sigma; }
+double BinomialVolGrid::getTimeToMaturity() const { return timeToMaturity; }
+size_t BinomialVolGrid::getPeriods() const { return periods; }
+
+double BinomialVolGrid::getDeltaT() const { return timeToMaturity / periods; }
+
 void latticeBuilder(double initial_value, double u, double d, size_t periods,
                     BinomialLattice<double> &lattice) {
     lattice[0][0] = initial_value;
@@ -37,6 +49,23 @@ void latticeBuilder(double initial_value, double u, double d, size_t periods,
         }
     }
 }
+
+VolGridAdapter::VolGridAdapter(const BinomialVolGrid &newVolGrid)
+    : volGrid(newVolGrid) {
+    double dt = getDeltaT();
+    double sigma = volGrid.getSigma();
+    double u = std::exp(sigma * std::sqrt(dt));
+    double d = 1 / u;
+
+    setDirections(u, d);
+}
+
+double VolGridAdapter::getSigma() const { return volGrid.getSigma(); }
+double VolGridAdapter::getTimeToMaturity() const {
+    return volGrid.getTimeToMaturity();
+}
+size_t VolGridAdapter::getPeriods() const { return volGrid.getPeriods(); }
+double VolGridAdapter::getDeltaT() const { return volGrid.getDeltaT(); }
 
 Numeric::Numeric(double newValue) : value(newValue) {}
 
@@ -116,8 +145,32 @@ StockDynamic::StockDynamic(size_t newPeriods, const Stock &newStock,
 
     double r = riskFreeRateFlat.getRFR(0, 0);
 
-    riskNeutralProbability =
-        (1 + r - model.getD()) / (model.getU() - model.getD());
+    riskNeutralProbability((1 + r - model.getD()) /
+                           (model.getU() - model.getD()));
+
+    buildLattice();
+}
+
+StockDynamic::StockDynamic(size_t newPeriods, const Stock &newStock,
+                           const RiskFreeRateFlat &newRiskFreeRateFlat,
+                           const VolGridAdapter &params)
+    : BinomialDynamic(newPeriods),
+      stock(newStock),
+      riskFreeRateFlat(newRiskFreeRateFlat) {
+    double u = params.getU();
+    double d = params.getD();
+    double div_yield = stock.getDivYield();
+    double r = riskFreeRateFlat.getRFR(0, 0);
+
+    double newR = std::exp(r * params.getDeltaT()) - 1;
+    riskFreeRateFlat = RiskFreeRateFlat(newR);
+
+    double dt = params.getDeltaT();
+
+    double r_cont = std::exp((r - div_yield) * dt);
+
+    riskNeutralProbability((r_cont - d) / (u - d));
+    model.setDirections(u, d);
 
     buildLattice();
 }

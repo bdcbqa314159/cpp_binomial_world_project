@@ -75,11 +75,27 @@ std::ostream &operator<<(std::ostream &os, const BinomialLattice<T> &Lattice) {
     return os;
 }
 
+class BinomialVolGrid {
+   private:
+    double sigma, timeToMaturity;
+    size_t periods;
+
+   public:
+    BinomialVolGrid(double, double, size_t);
+
+    double getSigma() const;
+    double getTimeToMaturity() const;
+    size_t getPeriods() const;
+
+    double getDeltaT() const;
+};
+
 class BinomialDirections {
    private:
     double u{}, d{};
 
    public:
+    BinomialDirections() = default;
     BinomialDirections(double);
     BinomialDirections(double, double);
 
@@ -87,6 +103,19 @@ class BinomialDirections {
     double getD() const;
 
     void setDirections(double, double);
+};
+
+class VolGridAdapter : public BinomialDirections {
+   private:
+    BinomialVolGrid volGrid;
+
+   public:
+    VolGridAdapter(const BinomialVolGrid &);
+    double getSigma() const;
+    double getTimeToMaturity() const;
+    size_t getPeriods() const;
+
+    double getDeltaT() const;
 };
 
 void latticeBuilder(double, double, double, size_t, BinomialLattice<double> &);
@@ -175,6 +204,8 @@ class StockDynamic : public BinomialDynamic {
    public:
     StockDynamic(size_t, const Stock &, const RiskFreeRateFlat &,
                  const BinomialDirections &);
+    StockDynamic(size_t, const Stock &, const RiskFreeRateFlat &,
+                 const VolGridAdapter &);
 
     double getRFR(size_t, size_t) const override;
     void buildLattice() override;
