@@ -2,7 +2,7 @@
 #define _LIBRARY_BINOMIAL_WORLD_
 
 // #include "./includes/BinomialDynamic.hpp"     // IWYU pragma: keep
-// #include "./includes/BinomialLattice.hpp"     // IWYU pragma: keep
+#include "./includes/BinomialLattice.hpp"  // IWYU pragma: keep
 // #include "./includes/BinomialModel.hpp"       // IWYU pragma: keep
 // #include "./includes/BinomialParameters.hpp"  // IWYU pragma: keep
 // #include "./includes/BinomialValues.hpp"             // IWYU pragma: keep
