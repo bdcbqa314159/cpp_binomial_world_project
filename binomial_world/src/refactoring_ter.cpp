@@ -4,24 +4,24 @@
 
 namespace new_code_bis {
 
-Numeric::Numeric(double newValue) : value(newValue) {}
+// Numeric::Numeric(double newValue) : value(newValue) {}
 
-double Numeric::operator()() const { return value; }
+// double Numeric::operator()() const { return value; }
 
-void Numeric::operator()(double newValue) {
-    assert(newValue >= 0.);
-    value = newValue;
-}
+// void Numeric::operator()(double newValue) {
+//     assert(newValue >= 0.);
+//     value = newValue;
+// }
 
-Spot::Spot(double newValue) : Numeric(newValue) { assert(newValue > 0.); }
+// Spot::Spot(double newValue) : Numeric(newValue) { assert(newValue > 0.); }
 
-DividendYield::DividendYield(double newValue) : Numeric(newValue) {
-    assert(newValue >= 0. && newValue < 1.);
-}
+// DividendYield::DividendYield(double newValue) : Numeric(newValue) {
+//     assert(newValue >= 0. && newValue < 1.);
+// }
 
-Probability::Probability(double newValue) : Numeric(newValue) {
-    assert(newValue >= 0. && newValue <= 1.);
-}
+// Probability::Probability(double newValue) : Numeric(newValue) {
+//     assert(newValue >= 0. && newValue <= 1.);
+// }
 
 Stock::Stock(double newSpot, double newDivYield)
     : spot(newSpot), div_yield(newDivYield) {}
@@ -164,7 +164,8 @@ double FuturesDynamic::price() const {
     return lattice[0][0];
 }
 
-Strike::Strike(double newValue) : Numeric(newValue) { assert(newValue >= 0.); }
+// Strike::Strike(double newValue) : Numeric(newValue) { assert(newValue >= 0.);
+// }
 
 Option::Option(size_t newMaturity) : maturity(newMaturity) {}
 size_t Option::getMaturity() const { return maturity; }

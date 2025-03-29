@@ -9,35 +9,11 @@
 #include "BinomialLattice.hpp"
 #include "BinomialVolGrid.hpp"
 #include "Common.hpp"
+#include "Numeric.hpp"
 #include "Utils.hpp"
 #include "VolGridAdapter.hpp"
 
 namespace new_code_bis {
-
-class Numeric {
-   protected:
-    double value{};
-
-   public:
-    Numeric(double);
-    double operator()() const;
-    void operator()(double);
-};
-
-class Spot : public Numeric {
-   public:
-    Spot(double);
-};
-
-class DividendYield : public Numeric {
-   public:
-    DividendYield(double);
-};
-
-class Probability : public Numeric {
-   public:
-    Probability(double);
-};
 
 class Stock {
    private:
@@ -115,11 +91,6 @@ class FuturesDynamic : public BinomialDynamic {
     double getRFR(size_t, size_t) const override;
     void buildLattice() override;
     double price() const;
-};
-
-class Strike : public Numeric {
-   public:
-    Strike(double);
 };
 
 class Option {

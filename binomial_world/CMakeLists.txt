@@ -31,6 +31,7 @@ set(sources src/Binomial_World.cpp
             src/BinomialVolGrid.cpp
             src/Utils.cpp
             src/VolGridAdapter.cpp
+            src/Numeric.cpp
             )
 
 
