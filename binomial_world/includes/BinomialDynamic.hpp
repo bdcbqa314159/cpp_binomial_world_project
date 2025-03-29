@@ -64,4 +64,28 @@ class FuturesDynamic : public BinomialDynamic {
     double price() const;
 };
 
+class RiskFreeRateTerm : public BinomialDynamic {
+   private:
+    ShortRate shortRate;
+    BinomialDirections model;
+
+   public:
+    RiskFreeRateTerm(size_t, const ShortRate &, const BinomialDirections &);
+    double getRFR(size_t, size_t) const override;
+    void buildLattice() override;
+};
+
+class ZeroCouponBondDynamic : public BinomialDynamic {
+   private:
+    size_t maturity;
+    RiskFreeRateTerm &primaryAsset;
+    double faceValue = 1.;
+
+   public:
+    ZeroCouponBondDynamic(size_t, RiskFreeRateTerm &, double = 1.);
+    double getRFR(size_t, size_t) const override;
+    void buildLattice() override;
+    double price() const;
+};
+
 #endif  // BINOMIAL_WORLD_BINOMIALDYNAMIC_HPP
