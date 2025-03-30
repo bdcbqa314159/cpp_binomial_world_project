@@ -20,20 +20,4 @@
 #include "./includes/Utils.hpp"                   // IWYU pragma: keep
 #include "./includes/VolGridAdapter.hpp"          // IWYU pragma: keep
 
-// #include "./includes/BinomialModel.hpp"       // IWYU pragma: keep
-// #include "./includes/BinomialParameters.hpp"  // IWYU pragma: keep
-// #include "./includes/BinomialValues.hpp"             // IWYU pragma: keep
-// #include "./includes/BinomialValuesTemplate.hpp"     // IWYU pragma: keep
-
-// #include "./includes/ElementaryPrices.hpp"           // IWYU pragma: keep
-
-// #include "./includes/RiskFreeRateTermStructure.hpp"  // IWYU pragma: keep
-// #include "./includes/ShortRateModel.hpp"             // IWYU pragma: keep
-
-// #include "./includes/Spot.hpp"                       // IWYU pragma: keep
-// #include "./includes/ZeroCouponBondDynamic.hpp"      // IWYU pragma: keep
-
-// #include "./includes/refactoring.hpp"      // IWYU pragma: keep
-// #include "./includes/refactoring_bis.hpp"  // IWYU pragma: keep
-
 #endif  //_LIBRARY_BINOMIAL_WORLD_
