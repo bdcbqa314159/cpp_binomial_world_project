@@ -442,3 +442,58 @@ const std::vector<double> &ElementaryPrices::getSpotRates() const {
     assert(lattice_built);
     return spotRates;
 }
+
+std::unique_ptr<BinomialModelParameters> BDTParameters::clone() const {
+    return std::make_unique<BDTParameters>(*this);
+}
+
+BDTParameters::BDTParameters(const std::vector<double> &_a_i, double _b)
+    : a_i(_a_i), b(_b) {
+    assert(a_i.size() > 0);
+}
+
+void BDTParameters::buildLattice(BinomialLattice<double> &lattice) {
+    size_t N = a_i.size() - 1;
+
+    assert(N == lattice.getPeriods());
+    lattice[0][0] = a_i[0];
+
+    for (size_t i = 1; i < N + 1; i++) {
+        for (size_t j = 0; j < i + 1; j++) {
+            lattice[i][j] = a_i[i] * exp(b * j);
+        }
+    }
+}
+const std::vector<double> &BDTParameters::getSpotRates() const { return a_i; }
+
+double BDTParameters::getB() const { return b; }
+
+RiskFreeRateTermModel::RiskFreeRateTermModel(
+    size_t newPeriods, const ShortRate &newShortRate,
+    const BinomialModelParameters &newModel)
+    : BinomialDynamic(newPeriods),
+      shortRate(newShortRate),
+      model(std::move(newModel.clone())) {
+    assert(newPeriods > 0);
+    buildLattice();
+}
+
+double RiskFreeRateTermModel::getRFR(size_t i, size_t j) const {
+    assert(j <= i);
+    return lattice[i][j];
+}
+
+double RiskFreeRateTermModel::getCouponPayment(size_t i, size_t j) const {
+    assert(j <= i);
+    return 0.;
+}
+
+void RiskFreeRateTermModel::buildLattice() {
+    if (lattice_built) return;
+
+    double initial_value = shortRate.getSpot();
+
+    model->buildLattice(lattice);
+
+    lattice_built = true;
+}

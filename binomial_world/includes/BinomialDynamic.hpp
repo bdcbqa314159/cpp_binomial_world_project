@@ -155,4 +155,42 @@ class ElementaryPrices : public BinomialDynamic {
     const std::vector<double> &getSpotRates() const;
 };
 
+// New kind of design for future refactoring ... yes again XD
+
+class BinomialModelParameters {
+   public:
+    virtual void buildLattice(BinomialLattice<double> &) = 0;
+    virtual std::unique_ptr<BinomialModelParameters> clone() const = 0;
+    virtual ~BinomialModelParameters() = default;
+};
+
+class BDTParameters : public BinomialModelParameters {
+   private:
+    std::vector<double> a_i;
+    double b{};
+
+   public:
+    std::unique_ptr<BinomialModelParameters> clone() const override;
+
+    BDTParameters(const std::vector<double> &, double);
+
+    void buildLattice(BinomialLattice<double> &lattice) override;
+
+    const std::vector<double> &getSpotRates() const;
+    double getB() const;
+};
+
+class RiskFreeRateTermModel : public BinomialDynamic {
+   private:
+    ShortRate shortRate;
+    std::unique_ptr<BinomialModelParameters> model;
+
+   public:
+    RiskFreeRateTermModel(size_t, const ShortRate &,
+                          const BinomialModelParameters &);
+    double getRFR(size_t, size_t) const override;
+    double getCouponPayment(size_t, size_t) const override;
+    void buildLattice() override;
+};
+
 #endif  // BINOMIAL_WORLD_BINOMIALDYNAMIC_HPP
