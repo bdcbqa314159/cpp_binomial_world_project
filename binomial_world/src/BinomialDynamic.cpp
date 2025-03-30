@@ -367,3 +367,78 @@ double SwapDynamic::price() const {
 
     return lattice[0][0];
 }
+
+ElementaryPrices::ElementaryPrices(RiskFreeRateTerm &_primaryAsset)
+    : BinomialDynamic(_primaryAsset.getPeriods() + 1),
+      maturity(_primaryAsset.getPeriods()),
+      primaryAsset(_primaryAsset) {
+    riskNeutralProbability = primaryAsset.getRiskNeutralProbability();
+    zcb.resize(maturity + 2);
+    spotRates.resize(maturity + 2);
+    buildLattice();
+    buildRates();
+}
+
+double ElementaryPrices::getRFR(size_t n, size_t i) const {
+    return primaryAsset.getRFR(n, i);
+}
+
+double ElementaryPrices::getCouponPayment(size_t i, size_t j) const {
+    assert(j <= i);
+    return 0.;
+}
+
+void ElementaryPrices::buildLattice() {
+    if (lattice_built) return;
+
+    double q = riskNeutralProbability();
+
+    lattice[0][0] = 1.;
+
+    for (size_t i = 1; i < maturity + 2; i++) {
+        for (size_t j = 0; j < i + 1; j++) {
+            if (j == 0) {
+                lattice[i][j] = lattice[i - 1][j] * q * 1. /
+                                (1. + primaryAsset.getRFR(i - 1, j));
+
+            } else if (j == i) {
+                lattice[i][j] = lattice[i - 1][j - 1] * (1. - q) * 1. /
+                                (1. + primaryAsset.getRFR(i - 1, j - 1));
+            }
+
+            else {
+                lattice[i][j] = lattice[i - 1][j - 1] * (1. - q) * 1. /
+                                    (1. + primaryAsset.getRFR(i - 1, j - 1)) +
+                                lattice[i - 1][j] * q * 1. /
+                                    (1. + primaryAsset.getRFR(i - 1, j));
+            }
+        }
+    }
+    lattice_built = true;
+}
+
+void ElementaryPrices::buildRates() {
+    zcb[0] = 1.;
+    for (size_t i = 1; i < maturity + 2; i++) {
+        zcb[i] = 0.;
+        for (size_t j = 0; j < i + 1; j++) zcb[i] += lattice[i][j];
+    }
+
+    spotRates[0] = 1.;
+    for (size_t i = 1; i < maturity + 2; i++) {
+        double a = 1. / zcb[i];
+        double b = 1. / i;
+
+        spotRates[i] = (pow(a, b) - 1.);
+    }
+}
+
+const std::vector<double> &ElementaryPrices::getZCB() const {
+    assert(lattice_built);
+    return zcb;
+}
+
+const std::vector<double> &ElementaryPrices::getSpotRates() const {
+    assert(lattice_built);
+    return spotRates;
+}

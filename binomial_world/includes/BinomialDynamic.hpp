@@ -138,4 +138,21 @@ class SwapDynamic : public BinomialDynamic {
     double price() const;
 };
 
+class ElementaryPrices : public BinomialDynamic {
+   private:
+    size_t maturity = 0;
+    RiskFreeRateTerm primaryAsset;
+    std::vector<double> zcb, spotRates;
+
+   public:
+    ElementaryPrices(RiskFreeRateTerm &);
+    double getRFR(size_t, size_t) const override;
+    double getCouponPayment(size_t, size_t) const override;
+    void buildLattice() override;
+    void buildRates();
+
+    const std::vector<double> &getZCB() const;
+    const std::vector<double> &getSpotRates() const;
+};
+
 #endif  // BINOMIAL_WORLD_BINOMIALDYNAMIC_HPP
