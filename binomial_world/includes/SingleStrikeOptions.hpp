@@ -26,4 +26,25 @@ class Put : public SingleStrike {
     double payoff(double) const override;
 };
 
+class InArrearsSingleStrike : public EurOptInArrears {
+   protected:
+    Strike K;
+
+   public:
+    InArrearsSingleStrike(size_t, double);
+    double getK() const;
+};
+
+class Caplet : public InArrearsSingleStrike {
+   public:
+    Caplet(size_t, double);
+    double payoff(double) const override;
+};
+
+class Flooret : public InArrearsSingleStrike {
+   public:
+    Flooret(size_t, double);
+    double payoff(double) const override;
+};
+
 #endif  // SINGLESTRIKEOPTIONS_HPP

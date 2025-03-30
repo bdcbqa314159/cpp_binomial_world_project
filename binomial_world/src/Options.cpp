@@ -70,3 +70,37 @@ double AmOption::priceBySnell(BinomialDynamic &modelDynamic) {
     }
     return priceTree[0][0];
 }
+
+OptionInArrears::OptionInArrears(size_t newMaturity)
+    : maturity(newMaturity - 1) {}
+size_t OptionInArrears::getMaturity() const { return maturity; }
+
+EurOptInArrears::EurOptInArrears(size_t newMaturity)
+    : OptionInArrears(newMaturity) {}
+
+double EurOptInArrears::priceByCRR(BinomialDynamic &modelDynamic) const {
+    double q = modelDynamic.getRiskNeutralProbability();
+    assert(maturity <= modelDynamic.getPeriods());
+    BinomialLattice<double> lattice = modelDynamic.getLattice();
+
+    size_t N = maturity;
+
+    std::vector<double> prices(N + 1);
+    for (size_t i = 0; i <= N; ++i) {
+        double rfr_N_i = modelDynamic.getRFR(N, i);
+        double discount_N_i = 1. / (1. + rfr_N_i);
+        prices[i] = payoff(lattice[N][i]) * discount_N_i;
+    }
+
+    for (int n = N - 1; n >= 0; --n) {
+        for (size_t i = 0; i <= n; ++i) {
+            double rfr_n_i = modelDynamic.getRFR(n, i);
+            double discount_n_i = 1. / (1. + rfr_n_i);
+
+            prices[i] =
+                discount_n_i * (q * prices[i + 1] + (1 - q) * prices[i]);
+        }
+    }
+
+    return prices[0];
+}
