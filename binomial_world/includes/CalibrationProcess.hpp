@@ -1,4 +1,6 @@
 #pragma once
+#ifndef BINOMIAL_WORLD_CALIBRATIONPROCESS_HPP
+#define BINOMIAL_WORLD_CALIBRATIONPROCESS_HPP
 #include <vector>
 
 class InputsCalibration {
@@ -43,3 +45,5 @@ class Calibration {
     const OutputsCalibration &getOutputs() const;
     void calibrate();
 };
+
+#endif  // BINOMIAL_WORLD_CALIBRATIONPROCESS_HPP

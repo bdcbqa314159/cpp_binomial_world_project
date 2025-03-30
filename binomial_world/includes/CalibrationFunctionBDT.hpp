@@ -1,4 +1,6 @@
 #pragma once
+#ifndef BINOMIAL_WORLD_CALIBRATIONFUNCTIONBDT_HPP
+#define BINOMIAL_WORLD_CALIBRATIONFUNCTIONBDT_HPP
 #include <vector>
 
 #include "NewtonRaphson.hpp"
@@ -16,3 +18,5 @@ class CalibrationFunctionBDT : public Function {
     double Value(double) const override;
     double Derivative(double) const override;
 };
+
+#endif  // BINOMIAL_WORLD_CALIBRATIONFUNCTIONBDT_HPP
