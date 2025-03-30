@@ -11,6 +11,7 @@
 #include "./includes/CouponPayment.hpp"        // IWYU pragma: keep
 #include "./includes/Equities.hpp"             // IWYU pragma: keep
 #include "./includes/InterestRates.hpp"        // IWYU pragma: keep
+#include "./includes/NewtonRaphson.hpp"        // IWYU pragma: keep
 #include "./includes/Numeric.hpp"              // IWYU pragma: keep
 #include "./includes/Options.hpp"              // IWYU pragma: keep
 #include "./includes/SingleStrikeOptions.hpp"  // IWYU pragma: keep
@@ -24,8 +25,6 @@
 // #include "./includes/CalibrationFunctionBDT.hpp"     // IWYU pragma: keep
 // #include "./includes/CalibrationProcess.hpp"         // IWYU pragma: keep
 // #include "./includes/ElementaryPrices.hpp"           // IWYU pragma: keep
-
-// #include "./includes/NewtonRaphson.hpp"              // IWYU pragma: keep
 
 // #include "./includes/RiskFreeRateTermStructure.hpp"  // IWYU pragma: keep
 // #include "./includes/ShortRateModel.hpp"             // IWYU pragma: keep

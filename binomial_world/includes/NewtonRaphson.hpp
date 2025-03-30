@@ -1,4 +1,6 @@
 #pragma once
+#ifndef BINOMIAL_WORLD_NEWTONRAPHSON_HPP
+#define BINOMIAL_WORLD_NEWTONRAPHSON_HPP
 
 class Function {
    public:
@@ -7,3 +9,5 @@ class Function {
 };
 
 double NewtonRaphson(const Function &, double, double, double = 0.0001);
+
+#endif  // BINOMIAL_WORLD_NEWTONRAPHSON_HPP

@@ -14,9 +14,10 @@ set(sources src/Binomial_World.cpp
             src/Numeric.cpp
             src/CouponParameters.cpp
             src/CouponPayment.cpp
+            src/NewtonRaphson.cpp
             # src/ShortRateModel.cpp
             # src/ElementaryPrices.cpp
-            # src/NewtonRaphson.cpp
+            # 
             # src/CalibrationFunctionBDT.cpp
             # src/CalibrationProcess.cpp
             
