@@ -16,7 +16,7 @@
 #include "./includes/SingleStrikeOptions.hpp"  // IWYU pragma: keep
 #include "./includes/Utils.hpp"                // IWYU pragma: keep
 #include "./includes/VolGridAdapter.hpp"       // IWYU pragma: keep
-#include "./includes/refactoring_ter.hpp"      // IWYU pragma: keep
+
 // #include "./includes/BinomialModel.hpp"       // IWYU pragma: keep
 // #include "./includes/BinomialParameters.hpp"  // IWYU pragma: keep
 // #include "./includes/BinomialValues.hpp"             // IWYU pragma: keep
