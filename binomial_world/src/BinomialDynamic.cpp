@@ -316,3 +316,54 @@ double ForwardsDynamic::price() const {
 
     return lattice[0][0] / zcbPriceDelivery;
 }
+
+SwapDynamic::SwapDynamic(size_t swap_mat, BinomialDynamic &_primaryAsset,
+                         double _fixedRate)
+    : BinomialDynamic(swap_mat - 1),
+      maturity(swap_mat - 1),
+      primaryAsset(_primaryAsset),
+      fixedRate(_fixedRate) {
+    assert(maturity <= primaryAsset.getPeriods());
+    riskNeutralProbability = primaryAsset.getRiskNeutralProbability();
+    buildLattice();
+}
+
+double SwapDynamic::getRFR(size_t n, size_t i) const {
+    return primaryAsset.getRFR(n, i);
+}
+
+double SwapDynamic::getCouponPayment(size_t i, size_t j) const {
+    assert(j <= i);
+    return (getRFR(i, j) - fixedRate);
+}
+
+void SwapDynamic::buildLattice() {
+    if (lattice_built) return;
+
+    double q = riskNeutralProbability();
+    BinomialLattice<double> primaryLattice = primaryAsset.getLattice();
+    size_t N = maturity;
+
+    for (int i = 0; i <= N; ++i) {
+        double discount_N_i = 1. / (1 + primaryAsset.getRFR(N, i));
+        lattice[N][i] = getCouponPayment(N, i) * discount_N_i;
+    }
+
+    for (int n = N - 1; n >= 0; --n) {
+        for (int i = 0; i <= n; ++i) {
+            double discount_n_i = 1. / (1 + primaryAsset.getRFR(n, i));
+            lattice[n][i] =
+                (getCouponPayment(n, i) + q * lattice[n + 1][i + 1] +
+                 (1. - q) * lattice[n + 1][i]) *
+                discount_n_i;
+        }
+    }
+
+    lattice_built = true;
+}
+
+double SwapDynamic::price() const {
+    assert(lattice_built);
+
+    return lattice[0][0];
+}
