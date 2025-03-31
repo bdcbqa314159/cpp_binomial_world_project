@@ -1,5 +1,8 @@
 #include "Options.hpp"
 
+#include <cassert>
+#include <cstddef>
+
 Option::Option(size_t newMaturity) : maturity(newMaturity) {}
 size_t Option::getMaturity() const { return maturity; }
 
@@ -64,6 +67,73 @@ double AmOption::priceBySnell(BinomialDynamic &modelDynamic) {
                 priceTree[n][i] = continuationValue;
                 stoppingTree[n][i] = false;
             } else if (priceTree[n][i] == 0.) {
+                stoppingTree[n][i] = false;
+            }
+        }
+    }
+    return priceTree[0][0];
+}
+
+BermOption::BermOption(size_t newMaturity,
+                       const std::vector<size_t> &newExerciseDates)
+    : Option(newMaturity),
+      exerciseDates(newExerciseDates),
+      priceTree(newMaturity),
+      stoppingTree(newMaturity) {
+    assert(exerciseDates.size() > 0 && exerciseDates.size() <= maturity);
+    assert(std::is_sorted(exerciseDates.cbegin(), exerciseDates.cend()));
+    assert(0 < exerciseDates.front() && exerciseDates.back() < maturity);
+}
+
+double BermOption::priceByBermudanSnell(BinomialDynamic &modelDynamic) {
+    double q = modelDynamic.getRiskNeutralProbability();
+
+    assert(maturity <= modelDynamic.getPeriods());
+
+    double continuationValue{};
+
+    BinomialLattice<double> lattice = modelDynamic.getLattice();
+
+    size_t N = maturity;
+
+    for (int i = 0; i <= N; i++) {
+        priceTree[N][i] = payoff(lattice[N][i]);
+        stoppingTree[N][i] = true;
+    }
+
+    size_t numberOfExerciseDates = exerciseDates.size();
+    bool isExerciseDate = false;
+
+    for (int n = N - 1; n >= 0; --n) {
+        if ((numberOfExerciseDates > 0) &&
+            (n == exerciseDates[numberOfExerciseDates - 1])) {
+            isExerciseDate = true;
+            numberOfExerciseDates--;
+        } else {
+            isExerciseDate = false;
+        }
+
+        for (int i = 0; i <= n; ++i) {
+            double rfr_n_i = modelDynamic.getRFR(n, i);
+            double discount_n_i = 1. / (1. + rfr_n_i);
+
+            continuationValue = discount_n_i * (q * priceTree[n + 1][i + 1] +
+                                                (1. - q) * priceTree[n + 1][i]);
+
+            if (isExerciseDate) {
+                priceTree[n][i] = payoff(lattice[n][i]);
+                stoppingTree[n][i] = true;
+
+                if (continuationValue > priceTree[n][i]) {
+                    priceTree[n][i] = continuationValue;
+                    stoppingTree[n][i] = false;
+                } else if (priceTree[n][i] == 0.) {
+                    stoppingTree[n][i] = false;
+                }
+            }
+
+            else {
+                priceTree[n][i] = continuationValue;
                 stoppingTree[n][i] = false;
             }
         }

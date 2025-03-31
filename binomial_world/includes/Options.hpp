@@ -1,4 +1,5 @@
 #pragma once
+#include <cstddef>
 #ifndef OPTIONS_HPP
 #define OPTIONS_HPP
 
@@ -31,6 +32,19 @@ class AmOption : public virtual Option {
    public:
     AmOption(size_t);
     double priceBySnell(BinomialDynamic &);
+    const BinomialLattice<double> &getPriceTree() const { return priceTree; }
+    const BinomialLattice<bool> &getStopping() const { return stoppingTree; }
+};
+
+class BermOption : public virtual Option {
+   private:
+    std::vector<size_t> exerciseDates;
+    BinomialLattice<double> priceTree;
+    BinomialLattice<bool> stoppingTree;
+
+   public:
+    BermOption(size_t, const std::vector<size_t> &);
+    double priceByBermudanSnell(BinomialDynamic &);
     const BinomialLattice<double> &getPriceTree() const { return priceTree; }
     const BinomialLattice<bool> &getStopping() const { return stoppingTree; }
 };
